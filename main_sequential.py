@@ -1,7 +1,7 @@
 """Entry point: sequential Jacobi solver for the 3D Poisson problem.
 
-    python3 main.py -N 30                                   # run to convergence
-    python3 main.py -N 200 --max-iter 100 --tol 0 --csv results/baseline.csv
+    python3 main_sequential.py -N 30                                   # run to convergence
+    python3 main_sequential.py -N 200 --max-iter 100 --tol 0 --csv results/baseline.csv
 """
 from poisson.args import parse_args
 from poisson.grid import grid_spacing, coordinates, allocate
