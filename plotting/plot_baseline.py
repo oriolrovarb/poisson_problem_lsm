@@ -1,4 +1,4 @@
-"""Sequential baseline: performance (Mlup/s and GB/s) vs grid size N, with cache sizes.
+"""Sequential baseline: performance (Mlup/s) vs grid size N, with cache sizes.
 
 Usage (from the repo folder):  python3 plotting/plot_baseline.py results/baseline.csv
 Plot is written to plots/<csv name>_performance.png
@@ -17,7 +17,6 @@ CACHES = [                     # (label, bytes available to ONE core, line style
     ("L2 256 KiB / core", 256 * 1024, "-."),
     ("L3 30 MiB / socket", 30 * 1024**2, "--"),
 ]
-BYTES_PER_LUP = 64             # same convention as poisson/metrics.py
 ARRAYS = 3                     # u, u_new, f
 BYTES_PER_VALUE = 8            # float64
 
@@ -55,12 +54,7 @@ ax.set_xlabel("Grid size N (interior points per axis)")
 ax.set_ylabel("Performance [Mlup/s]")
 ax.set_title("Sequential baseline — Poisson, Jacobi", pad=30)
 ax.grid(True)
-ax.legend(loc="lower left")
-
-# Same curve read in GB/s (Mlup/s * 64 B / 1000) on the right axis
-right = ax.secondary_yaxis("right", functions=(lambda m: m * BYTES_PER_LUP / 1e3,
-                                               lambda g: g * 1e3 / BYTES_PER_LUP))
-right.set_ylabel("Estimated memory bandwidth [GB/s]")
+ax.legend(loc="upper right")
 
 # Memory footprint of the three arrays on the top axis
 top = ax.secondary_xaxis("top", functions=(footprint_mb, n_from_mb))

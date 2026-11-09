@@ -1,0 +1,89 @@
+Model name:                              Intel(R) Xeon(R) CPU E5-2650 v4 @ 2.20GHz
+L1d cache:                               768 KiB (24 instances)
+L1i cache:                               768 KiB (24 instances)
+L2 cache:                                6 MiB (24 instances)
+L3 cache:                                60 MiB (2 instances)
+[numpy-seq] N=10 ranks=1 threads=1 | iterations=100 | time=0.004 s | 25.19 Mlup/s (1.61 GB/s) | final diff=nan | max error=2.68e-02
+[numpy-seq] N=15 ranks=1 threads=1 | iterations=100 | time=0.008 s | 43.04 Mlup/s (2.75 GB/s) | final diff=nan | max error=1.26e-02
+[numpy-seq] N=20 ranks=1 threads=1 | iterations=100 | time=0.016 s | 48.98 Mlup/s (3.13 GB/s) | final diff=nan | max error=3.19e-03
+[numpy-seq] N=25 ranks=1 threads=1 | iterations=100 | time=0.039 s | 40.23 Mlup/s (2.57 GB/s) | final diff=nan | max error=4.67e-02
+[numpy-seq] N=30 ranks=1 threads=1 | iterations=100 | time=0.056 s | 48.64 Mlup/s (3.11 GB/s) | final diff=nan | max error=1.23e-01
+[numpy-seq] N=40 ranks=1 threads=1 | iterations=100 | time=0.072 s | 89.05 Mlup/s (5.70 GB/s) | final diff=nan | max error=3.06e-01
+[numpy-seq] N=50 ranks=1 threads=1 | iterations=100 | time=0.127 s | 98.30 Mlup/s (6.29 GB/s) | final diff=nan | max error=4.66e-01
+[numpy-seq] N=70 ranks=1 threads=1 | iterations=100 | time=0.325 s | 105.45 Mlup/s (6.75 GB/s) | final diff=nan | max error=6.75e-01
+[numpy-seq] N=90 ranks=1 threads=1 | iterations=100 | time=0.718 s | 101.51 Mlup/s (6.50 GB/s) | final diff=nan | max error=7.87e-01
+[numpy-seq] N=100 ranks=1 threads=1 | iterations=100 | time=1.082 s | 92.38 Mlup/s (5.91 GB/s) | final diff=nan | max error=8.24e-01
+[numpy-seq] N=110 ranks=1 threads=1 | iterations=100 | time=1.534 s | 86.78 Mlup/s (5.55 GB/s) | final diff=nan | max error=8.52e-01
+[numpy-seq] N=120 ranks=1 threads=1 | iterations=100 | time=2.201 s | 78.50 Mlup/s (5.02 GB/s) | final diff=nan | max error=8.74e-01
+[numpy-seq] N=130 ranks=1 threads=1 | iterations=100 | time=3.087 s | 71.17 Mlup/s (4.56 GB/s) | final diff=nan | max error=8.91e-01
+[numpy-seq] N=150 ranks=1 threads=1 | iterations=100 | time=5.697 s | 59.24 Mlup/s (3.79 GB/s) | final diff=nan | max error=9.17e-01
+[numpy-seq] N=200 ranks=1 threads=1 | iterations=100 | time=15.906 s | 50.30 Mlup/s (3.22 GB/s) | final diff=nan | max error=9.52e-01
+[numpy-seq] N=300 ranks=1 threads=1 | iterations=100 | time=53.949 s | 50.05 Mlup/s (3.20 GB/s) | final diff=nan | max error=9.78e-01
+
+------------------------------------------------------------
+Sender: LSF System <lsfadmin@hpc.dtu.dk>
+Subject: Job 29938349: <poisson_seq> in cluster <dcc> Done
+
+Job <poisson_seq> was submitted from host <n-62-27-20> by user <s262240> in cluster <dcc> at Mon Nov  9 13:13:02 2026
+Job was executed on host(s) <n-62-21-75>, in queue <hpcintro>, as user <s262240> in cluster <dcc> at Mon Nov  9 13:13:03 2026
+</zhome/55/9/232051> was used as the home directory.
+</zhome/55/9/232051/02616-student/poisson_problem_lsm> was used as the working directory.
+Started at Mon Nov  9 13:13:03 2026
+Terminated at Mon Nov  9 13:14:33 2026
+Results reported at Mon Nov  9 13:14:33 2026
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+#BSUB -J poisson_seq
+#BSUB -q hpcintro
+#BSUB -W 1:00
+#BSUB -M 4GB
+#BSUB -n 1
+#BSUB -R "span[hosts=1]"
+#BSUB -o jobs/output/poisson_seq_%J.out
+#BSUB -e jobs/output/poisson_seq_%J.err
+
+# Submit from the repo folder:  bsub < jobs/baseline.sub
+
+# load the Python module
+module load matplotlib/3.10.3-numpy-2.3.1-python-3.12.11 >& /dev/null
+
+# CPU type, for the report
+lscpu | grep -E "Model name|cache"
+
+# parameters for the Jacobi program
+# TODO (WP1): choose ITER so the largest run takes at most 3-4 minutes
+ITER=100
+SIZES="10 15 20 25 30 40 50 70 90 100 110 120 130 150 200 300"
+
+for N in $SIZES; do
+    python3 main_sequential.py -N $N --max-iter $ITER --tol 0 --csv results/baseline.csv
+done
+
+------------------------------------------------------------
+
+Successfully completed.
+
+Resource usage summary:
+
+    CPU time :                                   88.54 sec.
+    Max Memory :                                 107 MB
+    Average Memory :                             107.00 MB
+    Total Requested Memory :                     4096.00 MB
+    Delta Memory :                               3989.00 MB
+    Max Swap :                                   -
+    Max Processes :                              4
+    Max Threads :                                5
+    Run time :                                   90 sec.
+    Turnaround time :                            91 sec.
+
+The output (if any) is above this job summary.
+
+
+
+PS:
+
+Read file <jobs/output/poisson_seq_29938349.err> for stderr output of this job.
+

@@ -18,7 +18,7 @@ lscpu | grep -E "Model name|cache"
 # parameters for the Jacobi program
 # TODO (WP1): choose ITER so the largest run takes at most 3-4 minutes
 ITER=100
-SIZES="50 100 150 200 300"
+SIZES="10 15 20 25 30 40 50 70 90 100 110 120 130 150 200 300"
 
 for N in $SIZES; do
     python3 main_sequential.py -N $N --max-iter $ITER --tol 0 --csv results/baseline.csv
