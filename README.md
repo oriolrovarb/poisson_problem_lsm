@@ -17,6 +17,17 @@ python3 main_sequential.py -N 200 --max-iter 100 --tol 0 --csv results/baseline.
 python3 main_sequential.py -h # list all options
 ```
 
+### Command-line arguments
+
+| Argument | Default | Meaning |
+|----------|---------|---------|
+| `-N` | `10` | Number of **interior** grid points per axis; arrays are `(N+2)³` (see [docs/conventions.md](docs/conventions.md)) |
+| `--max-iter` | `5000` | Maximum number of Jacobi iterations |
+| `--tol` | `1e-6` | Stop when `‖u_new − u‖₂ < tol`. `--tol 0` disables the check and runs exactly `--max-iter` iterations: use this for all timing and scaling runs |
+| `--check-every` | `1` | Compute the convergence norm only every k iterations (the norm costs an extra pass over memory) |
+| `--csv FILE` | none | Append one result row to `FILE` (header written if the file is new) |
+| `--slice FILE` | none | Save the middle z-slice of `u` as a `.npy` file for plotting |
+
 ## Files
 
 | Path | Purpose |
