@@ -13,7 +13,7 @@
 module load matplotlib/3.10.3-numpy-2.3.1-python-3.12.11 >& /dev/null
 
 # CPU type, for the report
-lscpu | grep "Model name"
+lscpu | grep -E "Model name|cache"
 
 # parameters for the Jacobi program
 # TODO (WP1): choose ITER so the largest run takes at most 3-4 minutes
