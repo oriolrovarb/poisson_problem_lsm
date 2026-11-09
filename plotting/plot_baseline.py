@@ -13,21 +13,16 @@ import matplotlib.pyplot as plt
 
 # hpcintro nodes: Xeon E5-2650 v4 (Intel spec, Week02 slides; lscpu in the job output)
 CACHES = [                     # (label, bytes available to ONE core, line style)
-    ("L1d 32 KiB / core", 32 * 1024, ":"),
-    ("L2 256 KiB / core", 256 * 1024, "-."),
-    ("L3 30 MiB / socket", 30 * 1024**2, "--"),
+    ("L1d 32 KiB", 32 * 1024, ":"),
+    ("L2 256 KiB", 256 * 1024, "-."),
+    ("L3 30 MiB", 30 * 1024**2, "--"),
 ]
 ARRAYS = 3                     # u, u_new, f
 BYTES_PER_VALUE = 8            # float64
 
 
-def footprint_mb(n):
-    """Memory of u, u_new and f for grid size N, in MB."""
-    return ARRAYS * BYTES_PER_VALUE * (np.asarray(n, dtype=float) + 2) ** 3 / 1e6
-
-
 def n_from_mb(mb):
-    """Inverse of footprint_mb: grid size N whose arrays take `mb` MB."""
+    """Grid size N whose arrays u, u_new and f together take `mb` MB."""
     return np.cbrt(np.asarray(mb, dtype=float) * 1e6 / (ARRAYS * BYTES_PER_VALUE)) - 2
 
 
@@ -48,18 +43,13 @@ ax.plot(n_values, mlups_mean, "o-", label="Measured")
 # Vertical line where u, u_new and f together no longer fit in each cache level
 for label, size, style in CACHES:
     n_cache = n_from_mb(size / 1e6)
-    ax.axvline(n_cache, color="k", linestyle=style, label=f"{label} full (N ≈ {n_cache:.0f})")
+    ax.axvline(n_cache, color="k", linestyle=style, label=f"{label} (N ≈ {n_cache:.0f})")
 ax.set_xlim(left=0)
 ax.set_xlabel("Grid size N (interior points per axis)")
 ax.set_ylabel("Performance [Mlup/s]")
-ax.set_title("Sequential baseline — Poisson, Jacobi", pad=30)
+ax.set_title("Sequential baseline — Poisson, Jacobi")
 ax.grid(True)
 ax.legend(loc="upper right")
-
-# Memory footprint of the three arrays on the top axis
-top = ax.secondary_xaxis("top", functions=(footprint_mb, n_from_mb))
-top.set_xticks([1, 10, 30, 100, 300, 660])
-top.set_xlabel("Memory of u, u_new, f [MB]")
 
 fig.savefig(f"plots/{name}_performance.png", bbox_inches="tight")
 plt.close(fig)
