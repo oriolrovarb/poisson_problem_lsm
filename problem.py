@@ -29,6 +29,17 @@ def exact_solution(x, y, z):
     return _sin_product(x, y, z)
 
 
+def max_error(u, x, y, z):
+    """Max |u - u_exact| over the interior of the block spanned by x, y, z.
+
+    x, y, z are the coordinates of the whole padded block (same as for
+    source_term). Interior only, so boundary and ghost layers are ignored.
+    MPI: this is the rank's local max; combine with allreduce(op=MPI.MAX).
+    """
+    exact = exact_solution(x, y, z)
+    return float(np.max(np.abs(u[1:-1, 1:-1, 1:-1] - exact[1:-1, 1:-1, 1:-1])))
+
+
 def apply_dirichlet(u, value=0.0):
     """Set all six outer faces of a global array to the Dirichlet value (u = 0).
 
