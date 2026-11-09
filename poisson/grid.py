@@ -1,4 +1,4 @@
-"""Grid helpers. Conventions (N, Δ, index order) are described in conventions.md."""
+"""Grid helpers. Conventions (N, Δ, index order) are described in docs/conventions.md."""
 import numpy as np
 
 

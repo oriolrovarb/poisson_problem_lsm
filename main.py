@@ -3,12 +3,12 @@
     python3 main.py -N 30                                   # run to convergence
     python3 main.py -N 200 --max-iter 100 --tol 0 --csv results/baseline.csv
 """
-from args import parse_args
-from grid import grid_spacing, coordinates, allocate
-from problem import source_term, max_error, apply_dirichlet
-from jacobi import jacobi
-from timing import wall_time, performance
-from output import report, run_info, save_slice
+from poisson.args import parse_args
+from poisson.grid import grid_spacing, coordinates, allocate
+from poisson.problem import source_term, max_error, apply_dirichlet
+from poisson.jacobi import jacobi
+from poisson.timing import wall_time, performance
+from poisson.output import report, run_info, save_slice
 
 
 def warmup():
