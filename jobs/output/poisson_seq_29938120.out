@@ -1,0 +1,74 @@
+Model name:                              Intel(R) Xeon(R) CPU E5-2650 v4 @ 2.20GHz
+[numpy-seq] N=50 ranks=1 threads=1 | iterations=100 | time=0.140 s | 89.23 Mlup/s (5.71 GB/s) | final diff=nan | max error=4.66e-01
+[numpy-seq] N=100 ranks=1 threads=1 | iterations=100 | time=1.183 s | 84.51 Mlup/s (5.41 GB/s) | final diff=nan | max error=8.24e-01
+[numpy-seq] N=150 ranks=1 threads=1 | iterations=100 | time=5.922 s | 56.99 Mlup/s (3.65 GB/s) | final diff=nan | max error=9.17e-01
+[numpy-seq] N=200 ranks=1 threads=1 | iterations=100 | time=16.675 s | 47.98 Mlup/s (3.07 GB/s) | final diff=nan | max error=9.52e-01
+[numpy-seq] N=300 ranks=1 threads=1 | iterations=100 | time=56.636 s | 47.67 Mlup/s (3.05 GB/s) | final diff=nan | max error=9.78e-01
+
+------------------------------------------------------------
+Sender: LSF System <lsfadmin@hpc.dtu.dk>
+Subject: Job 29938120: <poisson_seq> in cluster <dcc> Done
+
+Job <poisson_seq> was submitted from host <n-62-27-20> by user <s262240> in cluster <dcc> at Mon Nov  9 12:48:08 2026
+Job was executed on host(s) <n-62-21-76>, in queue <hpcintro>, as user <s262240> in cluster <dcc> at Mon Nov  9 12:48:10 2026
+</zhome/55/9/232051> was used as the home directory.
+</zhome/55/9/232051/02616-student/poisson_problem_lsm> was used as the working directory.
+Started at Mon Nov  9 12:48:10 2026
+Terminated at Mon Nov  9 12:49:34 2026
+Results reported at Mon Nov  9 12:49:34 2026
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+#BSUB -J poisson_seq
+#BSUB -q hpcintro
+#BSUB -W 1:00
+#BSUB -M 4GB
+#BSUB -n 1
+#BSUB -R "span[hosts=1]"
+#BSUB -o jobs/poisson_seq_%J.out
+#BSUB -e jobs/poisson_seq_%J.err
+
+# Submit from the repo folder:  bsub < jobs/baseline.sub
+
+# load the Python module
+module load matplotlib/3.10.3-numpy-2.3.1-python-3.12.11 >& /dev/null
+
+# CPU type, for the report
+lscpu | grep "Model name"
+
+# parameters for the Jacobi program
+# TODO (WP1): choose ITER so the largest run takes at most 3-4 minutes
+ITER=100
+SIZES="50 100 150 200 300"
+
+for N in $SIZES; do
+    python3 main_sequential.py -N $N --max-iter $ITER --tol 0 --csv results/baseline.csv
+done
+
+------------------------------------------------------------
+
+Successfully completed.
+
+Resource usage summary:
+
+    CPU time :                                   82.96 sec.
+    Max Memory :                                 217 MB
+    Average Memory :                             217.00 MB
+    Total Requested Memory :                     4096.00 MB
+    Delta Memory :                               3879.00 MB
+    Max Swap :                                   -
+    Max Processes :                              4
+    Max Threads :                                5
+    Run time :                                   84 sec.
+    Turnaround time :                            86 sec.
+
+The output (if any) is above this job summary.
+
+
+
+PS:
+
+Read file <jobs/poisson_seq_29938120.err> for stderr output of this job.
+
