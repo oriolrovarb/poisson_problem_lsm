@@ -3,11 +3,9 @@
     python3 main.py -N 30                                   # run to convergence
     python3 main.py -N 200 --max-iter 100 --tol 0 --csv results/baseline.csv
 """
-import numpy as np
-
 from args import parse_args
 from grid import grid_spacing, coordinates, allocate
-from problem import source_term, exact_solution, apply_dirichlet
+from problem import source_term, max_error, apply_dirichlet
 from jacobi import jacobi
 from timing import wall_time, performance
 from output import report, run_info, save_slice
@@ -42,8 +40,7 @@ def main(argv=None):
 
     # 5. results
     mlups, gbs = performance(N, iterations, seconds)
-    error = float(np.max(np.abs(u[1:-1, 1:-1, 1:-1]
-                                - exact_solution(x, x, x)[1:-1, 1:-1, 1:-1])))
+    error = max_error(u, x, x, x)
     report(dict(impl="numpy-seq", N=N, ranks=1, threads=1,
                 iterations=iterations, max_iter=args.max_iter, tol=args.tol,
                 check_every=args.check_every, time_s=seconds, mlups=mlups,
