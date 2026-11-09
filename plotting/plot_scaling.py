@@ -33,6 +33,19 @@ speedup = p0 * t0 / t_mean
 efficiency = speedup / p_values
 
 title_suffix = f"Poisson, slab decomposition, N = {N}"
+plt.rcParams["axes.titlepad"] = 30     # room for the top axis
+
+
+def add_work_per_rank_axis():
+    """Top axis: how many grid points each rank computes (N^3 / p), in millions.
+
+    In strong scaling the total work is fixed, so each rank's share shrinks.
+    """
+    top = plt.gca().secondary_xaxis("top")
+    top.set_xticks(p_values)
+    top.set_xticklabels([f"{float(N)**3 / p / 1e6:.2g}" for p in p_values])
+    top.set_xlabel("Grid points per rank [millions]")
+
 
 # 1. Total time
 plt.figure()
@@ -41,6 +54,7 @@ plt.xlabel("Number of MPI processes")
 plt.ylabel("Time of the iteration loop [s]")
 plt.title(f"Time — {title_suffix}")
 plt.xticks(p_values)
+add_work_per_rank_axis()
 plt.grid(True)
 plt.savefig(f"plots/{name}_timing.png", bbox_inches="tight")
 plt.close()
@@ -53,6 +67,7 @@ plt.xlabel("Number of MPI processes")
 plt.ylabel("Speedup")
 plt.title(f"Speedup — {title_suffix}")
 plt.xticks(p_values)
+add_work_per_rank_axis()
 plt.legend()
 plt.grid(True)
 plt.savefig(f"plots/{name}_speedup.png", bbox_inches="tight")
@@ -66,6 +81,7 @@ plt.xlabel("Number of MPI processes")
 plt.ylabel("Parallel efficiency  S(p) / p")
 plt.title(f"Parallel efficiency — {title_suffix}")
 plt.xticks(p_values)
+add_work_per_rank_axis()
 plt.ylim(0, max(1.1, 1.05 * efficiency.max()))   # superlinear (E > 1) stays visible
 plt.legend()
 plt.grid(True)
