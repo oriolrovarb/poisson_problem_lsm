@@ -1,0 +1,26 @@
+#BSUB -J poisson_seq
+#BSUB -q hpcintro
+#BSUB -W 1:00
+#BSUB -M 4GB
+#BSUB -n 1
+#BSUB -R "span[hosts=1]"
+#BSUB -o jobs/poisson_seq_%J.out
+#BSUB -e jobs/poisson_seq_%J.err
+
+# Submit from the repo folder:  bsub < jobs/baseline.sub
+
+# load the Python modules
+module load matplotlib/3.10.3-numpy-2.3.1-python-3.12.11 >& /dev/null
+module load mpi4py/4.0.3-python-3.12.11-openmpi-5.0.8 >& /dev/null
+
+# CPU type, for the report
+lscpu | grep "Model name"
+
+# parameters for the Jacobi program
+# TODO (WP1): choose ITER so the largest run takes at most 3-4 minutes
+ITER=100
+SIZES="50 100 150 200 300"
+
+for N in $SIZES; do
+    python3 main_sequential.py -N $N --max-iter $ITER --tol 0 --csv results/baseline.csv
+done
