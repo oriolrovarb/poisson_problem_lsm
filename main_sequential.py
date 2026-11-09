@@ -10,7 +10,7 @@ from poisson.grid import grid_spacing, coordinates, allocate
 from poisson.problem import source_term, max_error, apply_dirichlet
 from poisson.jacobi import jacobi
 from poisson.metrics import performance
-from poisson.output import report, run_info, save_slice
+from poisson.output import report, save_slice
 
 
 def warmup():
@@ -46,7 +46,7 @@ def main(argv=None):
     report(dict(impl="numpy-seq", N=N, ranks=1, threads=1,
                 iterations=iterations, max_iter=args.max_iter, tol=args.tol,
                 check_every=args.check_every, time_s=seconds, mlups=mlups,
-                gbs=gbs, final_diff=diff, max_error=error, **run_info()),
+                gbs=gbs, final_diff=diff, max_error=error),
            args.csv)
     if args.slice:
         save_slice(u, args.slice)

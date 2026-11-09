@@ -5,7 +5,6 @@ experiments land in the same CSV format and can be plotted by one script.
 """
 import csv
 import os
-import socket
 
 import numpy as np
 
@@ -23,28 +22,7 @@ CSV_FIELDS = [
     "gbs",
     "final_diff",   # NaN for timing runs (tol <= 0)
     "max_error",    # max |u - u_exact| over the interior
-    "host",         # node name, to spot runs on different machines
-    "cpu",          # CPU model, the report must state it
-    "jobid",        # LSF job id, to find the job's output file
 ]
-
-
-def cpu_model():
-    """CPU model name from /proc/cpuinfo (Linux), or 'unknown'."""
-    try:
-        with open("/proc/cpuinfo") as fh:
-            for line in fh:
-                if line.startswith("model name"):
-                    return line.split(":", 1)[1].strip()
-    except OSError:
-        pass
-    return "unknown"
-
-
-def run_info():
-    """Fields describing where the run happened: host, cpu, jobid."""
-    return dict(host=socket.gethostname(), cpu=cpu_model(),
-                jobid=os.environ.get("LSB_JOBID", ""))
 
 
 def report(result, csv_path=None):
