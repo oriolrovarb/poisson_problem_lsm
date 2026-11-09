@@ -1,0 +1,31 @@
+#BSUB -J poisson_mpi
+#BSUB -q hpcintro
+#BSUB -W 1:00
+#BSUB -M 4GB
+#BSUB -n 24
+#BSUB -R "span[hosts=1]"
+#BSUB -o jobs/poisson_mpi_%J.out
+#BSUB -e jobs/poisson_mpi_%J.err
+
+# Submit from the repo folder:  bsub < jobs/mpi_strong.sub
+# Strong scaling on one node: same N, increasing number of ranks.
+
+# load the Python and MPI modules
+module load matplotlib/3.10.3-numpy-2.3.1-python-3.12.11 >& /dev/null
+module load mpi4py/4.0.3-python-3.12.11-openmpi-5.0.8 >& /dev/null
+
+# CPU type, for the report
+lscpu | grep "Model name"
+
+# parameters for the Jacobi program
+# TODO (WP4): choose N and ITER (same ITER rule as the baseline)
+N=200
+ITER=100
+RANKS="1 2 4 8 12 16 24"
+
+# MPI mapping options
+MOPTS="--bind-to core"
+
+for NP in $RANKS; do
+    mpirun -n $NP $MOPTS python3 main_mpi.py -N $N --max-iter $ITER --tol 0 --csv results/mpi_strong.csv
+done
