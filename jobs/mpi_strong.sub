@@ -4,8 +4,8 @@
 #BSUB -M 4GB
 #BSUB -n 24
 #BSUB -R "span[hosts=1]"
-#BSUB -o jobs/poisson_mpi_%J.out
-#BSUB -e jobs/poisson_mpi_%J.err
+#BSUB -o jobs/output/poisson_mpi_%J.out
+#BSUB -e jobs/output/poisson_mpi_%J.err
 
 # Submit from the repo folder:  bsub < jobs/mpi_strong.sub
 # Strong scaling on one node: same N, increasing number of ranks.
