@@ -6,7 +6,7 @@ from poisson.grid import grid_spacing, coordinates, allocate
 from poisson.problem import source_term, max_error, apply_dirichlet
 from poisson.jacobi import jacobi, jacobi_step, diff_sq
 from poisson.metrics import performance
-from poisson.output import report
+from poisson.output import report, report_ranks
 from poisson.decomposition import slab_communicator, slab_range, exchange_halos
 
 
@@ -31,12 +31,28 @@ def main():
     apply_dirichlet(u)
     apply_dirichlet(u_new)
 
+    # Per-rank time split, for the load-balance plot. "comm" includes waiting
+    # for neighbours, so an overloaded neighbour shows up as comm time here.
+    times = {"compute": 0.0, "comm": 0.0}
+
     def mpi_step(u, u_new, f, delta2):
+        t_a = MPI.Wtime()
         exchange_halos(cart, u, lower, upper)
+        t_b = MPI.Wtime()
         jacobi_step(u, u_new, f, delta2)
+        t_c = MPI.Wtime()
+        times["comm"] += t_b - t_a
+        times["compute"] += t_c - t_b
 
     def mpi_diff_sq(u, u_new):
-        return cart.allreduce(diff_sq(u, u_new), op=MPI.SUM)
+        t_a = MPI.Wtime()
+        local = diff_sq(u, u_new)
+        t_b = MPI.Wtime()
+        total = cart.allreduce(local, op=MPI.SUM)
+        t_c = MPI.Wtime()
+        times["compute"] += t_b - t_a
+        times["comm"] += t_c - t_b
+        return total
 
     # 4. Jacobi iterations: the ONLY timed part; all ranks start together
     cart.Barrier()
@@ -47,7 +63,11 @@ def main():
 
     # 5. results: combine over ranks, rank 0 reports
     error = cart.allreduce(max_error(u, x_local, x, x), op=MPI.MAX)
+    rank_rows = cart.gather(dict(N=N, ranks=P, rank=rank, compute_s=times["compute"],
+                                 comm_s=times["comm"]), root=0)
     if rank == 0:
+        if args.rank_csv:
+            report_ranks(rank_rows, args.rank_csv)
         mlups, gbs = performance(N, iterations, seconds)
         report(dict(impl="mpi-slab", N=N, ranks=P, threads=1,
                     iterations=iterations, max_iter=args.max_iter, tol=args.tol,

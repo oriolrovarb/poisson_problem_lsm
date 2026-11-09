@@ -27,5 +27,5 @@ RANKS="1 2 4 8 12 16 24"
 MOPTS="--bind-to core"
 
 for NP in $RANKS; do
-    mpirun -n $NP $MOPTS python3 main_mpi.py -N $N --max-iter $ITER --tol 0 --csv results/mpi_strong.csv
+    mpirun -n $NP $MOPTS python3 main_mpi.py -N $N --max-iter $ITER --tol 0 --csv results/mpi_strong.csv --rank-csv results/mpi_strong_ranks.csv
 done

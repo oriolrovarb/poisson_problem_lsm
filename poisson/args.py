@@ -14,6 +14,8 @@ def parse_args():
                         help="compute the convergence norm only every k iterations")
     parser.add_argument("--csv", default=None,
                         help="append one result row to this CSV file")
+    parser.add_argument("--rank-csv", default=None,
+                        help="MPI only: append one row per rank (compute/comm time) to this CSV file")
     parser.add_argument("--slice", default=None,
                         help="save the middle z-slice of u to this .npy file")
     return parser.parse_args()
