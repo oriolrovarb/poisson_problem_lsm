@@ -3,11 +3,13 @@
     python3 main_sequential.py -N 30                                   # run to convergence
     python3 main_sequential.py -N 200 --max-iter 100 --tol 0 --csv results/baseline.csv
 """
+import time
+
 from poisson.args import parse_args
 from poisson.grid import grid_spacing, coordinates, allocate
 from poisson.problem import source_term, max_error, apply_dirichlet
 from poisson.jacobi import jacobi
-from poisson.timing import wall_time, performance
+from poisson.metrics import performance
 from poisson.output import report, run_info, save_slice
 
 
@@ -33,10 +35,10 @@ def main(argv=None):
     warmup()
 
     # 4. Jacobi iterations: the ONLY timed part
-    t0 = wall_time()
+    t0 = time.perf_counter()
     u, iterations, diff = jacobi(u, u_new, f, delta, args.max_iter, args.tol,
                                  args.check_every)
-    seconds = wall_time() - t0
+    seconds = time.perf_counter() - t0
 
     # 5. results
     mlups, gbs = performance(N, iterations, seconds)

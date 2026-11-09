@@ -38,7 +38,7 @@ python3 main_sequential.py -h # list all options
 | `poisson/grid.py` | Grid spacing, coordinates, allocation of `u`, `u_new`, `f` for any padded block |
 | `poisson/problem.py` | Source term, exact solution, max error, Dirichlet boundary conditions |
 | `poisson/jacobi.py` | Jacobi kernels (`jacobi_step`, `diff_sq`) and the shared iteration loop `jacobi()` |
-| `poisson/timing.py` | Wall-clock timer and conversion to Mlup/s and GB/s |
+| `poisson/metrics.py` | Conversion of a run time into Mlup/s and GB/s |
 | `poisson/output.py` | Printed result line, CSV row per run, CPU/host info, slice dump |
 | `docs/conventions.md` | Shared definitions: `N`, grid spacing, index order and memory layout |
 | `docs/report_notes.md` | Notes collected for the report |

@@ -1,15 +1,9 @@
-"""Timing and performance metrics, shared by all implementations.
+"""Performance metrics, shared by all implementations.
 """
-import time
 
 # Bytes moved per lattice update, course convention (Week02 slides):
 # 7 loads + 1 store, 8 bytes each (float64).
 BYTES_PER_LUP = 64
-
-
-def wall_time():
-    """Wall-clock time in seconds; only differences between two calls matter."""
-    return time.perf_counter()
 
 
 def performance(N, iterations, seconds):
