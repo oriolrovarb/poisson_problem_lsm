@@ -1,7 +1,7 @@
 from argparse import ArgumentParser
 
 
-def parse_args(argv=None):
+def parse_args():
     parser = ArgumentParser(description="3D Poisson problem solved with Jacobi iterations")
     parser.add_argument("-N", type=int, default=10,
                         help="number of interior grid points per axis (arrays are (N+2)^3)")
@@ -16,8 +16,5 @@ def parse_args(argv=None):
                         help="append one result row to this CSV file")
     parser.add_argument("--slice", default=None,
                         help="save the middle z-slice of u to this .npy file")
-    return parser.parse_args(argv)
+    return parser.parse_args()
 
-
-if __name__ == "__main__":
-    print(parse_args())

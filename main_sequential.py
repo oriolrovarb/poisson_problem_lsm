@@ -1,8 +1,4 @@
-"""Entry point: sequential Jacobi solver for the 3D Poisson problem.
-
-    python3 main_sequential.py -N 30                                   # run to convergence
-    python3 main_sequential.py -N 200 --max-iter 100 --tol 0 --csv results/baseline.csv
-"""
+"""Entry point: sequential Jacobi solver for the 3D Poisson problem."""
 import time
 
 from poisson.args import parse_args
@@ -19,9 +15,9 @@ def warmup():
     jacobi(u, u_new, f, grid_spacing(4), max_iter=2, tol=1e-30)
 
 
-def main(argv=None):
+def main():
     # 1. run-time parameters
-    args = parse_args(argv)
+    args = parse_args()
     N = args.N
     delta = grid_spacing(N)
     x = coordinates(N)

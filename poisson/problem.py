@@ -40,12 +40,12 @@ def max_error(u, x, y, z):
     return float(np.max(np.abs(u[1:-1, 1:-1, 1:-1] - exact[1:-1, 1:-1, 1:-1])))
 
 
-def apply_dirichlet(u, value=0.0):
-    """Set all six outer faces of a global array to the Dirichlet value (u = 0).
+def apply_dirichlet(u):
+    """Set all six outer faces of a global array to the Dirichlet value u = 0.
 
     MPI: on a local block only call this for faces on the physical cube
     boundary; the other faces are ghost layers filled by the halo exchange.
     """
-    u[0, :, :] = u[-1, :, :] = value
-    u[:, 0, :] = u[:, -1, :] = value
-    u[:, :, 0] = u[:, :, -1] = value
+    u[0, :, :] = u[-1, :, :] = 0.0
+    u[:, 0, :] = u[:, -1, :] = 0.0
+    u[:, :, 0] = u[:, :, -1] = 0.0

@@ -46,10 +46,10 @@ def report(result, csv_path=None):
             writer.writerow(result)
 
 
-def save_slice(u, path, k=None):
-    """Save the 2D slice u[:, :, k] (default: middle) as .npy for plotting.
+def save_slice(u, path):
+    """Save the middle 2D slice u[:, :, k] as .npy for plotting.
 
     Placeholder until we get the slice-dump method the assignment mentions.
     """
-    k = u.shape[2] // 2 if k is None else k
+    k = u.shape[2] // 2
     np.save(path, u[:, :, k])
