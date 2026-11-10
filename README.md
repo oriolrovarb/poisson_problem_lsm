@@ -1,5 +1,14 @@
 # Poisson Problem using MPI
 
+## Who is working on what
+
+| Who | Task |
+|-----|------|
+| Rasmus | Hybrid MPI implementation with Numba |
+| Jesper | Testing geometries for the data |
+| Oriol | Investigating why the plot converges at 0.45 and not lower |
+| Frederic | Experiments and plotting |
+
 ## Getting started
 
 Load the course modules (on the DTU HPC):
