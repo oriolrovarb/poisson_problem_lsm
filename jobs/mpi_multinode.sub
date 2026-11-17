@@ -1,0 +1,45 @@
+#BSUB -J poisson_multinode
+#BSUB -q hpcintro
+#BSUB -W 1:00
+#BSUB -M 4GB
+#BSUB -n 48
+#BSUB -R "span[ptile=24]"
+#BSUB -o jobs/output/poisson_multinode_%J.out
+#BSUB -e jobs/output/poisson_multinode_%J.err
+
+# Submit from the repo folder:  bsub < jobs/mpi_multinode.sub
+# Two nodes (24 cores each). Messages between the nodes go over the network, so this is
+# where the amount of halo data should matter more than inside one node.
+#   P=24 as 12 ranks on each node (compare with the one-node P=24 runs of mpi_decomp.sub)
+#   P=48 as 24 ranks on each node
+# Ranks are numbered node by node (--map-by ppr:..:node), so the rank order, which
+# the Cartesian communicator keeps (reorder=False), decides which neighbours are on the other node.
+
+module load matplotlib/3.10.3-numpy-2.3.1-python-3.12.11 >& /dev/null
+module load mpi4py/4.0.3-python-3.12.11-openmpi-5.0.8 >& /dev/null
+
+lscpu | grep -E "Model name|Socket|NUMA node"
+echo "hosts: $LSB_HOSTS" | tr ' ' '\n' | sort | uniq -c
+
+N=200
+ITER=100
+REPS=3
+
+# name:dims:ranks per node
+CASES="
+slab:24x1x1:12 pencil:6x4x1:12 cube:4x3x2:12
+slab:48x1x1:24 pencil:8x6x1:24 cube:4x4x3:24
+"
+
+for C in $CASES; do
+    NAME=${C%%:*}
+    REST=${C#*:}
+    DIMS=$(echo ${REST%%:*} | tr x ' ')
+    PPN=${REST#*:}
+    NP=$(echo $DIMS | awk '{print $1*$2*$3}')
+    for REP in $(seq $REPS); do
+        mpirun -n $NP --map-by ppr:$PPN:node --bind-to core --report-bindings \
+            python3 main_mpi_cart.py -N $N --max-iter $ITER --tol 0 \
+            --dims $DIMS --csv results/mpi_multinode.csv
+    done
+done
