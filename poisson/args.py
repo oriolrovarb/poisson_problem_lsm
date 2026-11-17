@@ -12,6 +12,10 @@ def parse_args():
                              "and runs exactly --max-iter iterations (use this for timing)")
     parser.add_argument("--check-every", type=int, default=1,
                         help="compute the convergence norm only every k iterations")
+    parser.add_argument("--dims", type=int, nargs=3, default=None, metavar=("PX", "PY", "PZ"),
+                        help="MPI cartesian only: process grid, product must equal the number of "
+                             "ranks (P 1 1 = slab, Px Py 1 = pencil, Px Py Pz = cube); "
+                             "default: MPI.Compute_dims")
     parser.add_argument("--csv", default=None,
                         help="append one result row to this CSV file")
     parser.add_argument("--rank-csv", default=None,

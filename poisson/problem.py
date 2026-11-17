@@ -49,3 +49,17 @@ def apply_dirichlet(u):
     u[0, :, :] = u[-1, :, :] = 0.0
     u[:, 0, :] = u[:, -1, :] = 0.0
     u[:, :, 0] = u[:, :, -1] = 0.0
+
+
+def apply_dirichlet_faces(u, lower, upper):
+    """Dirichlet value u = 0 only on the faces of a local block that lie on the cube boundary.
+
+    lower[d] / upper[d] are True if the block touches the physical boundary on
+    the low / high side of axis d (i.e. that neighbour is MPI.PROC_NULL). The
+    other faces are ghost layers, filled by the halo exchange.
+    """
+    for d in range(3):
+        if lower[d]:
+            u[(slice(None),) * d + (0,)] = 0.0
+        if upper[d]:
+            u[(slice(None),) * d + (-1,)] = 0.0
