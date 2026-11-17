@@ -66,7 +66,7 @@ Code: `poisson/jacobi.py` (`jacobi_step`, `diff_sq`, `jacobi`).
 
 ## 4. Domain decomposition and halos
 
-**Idea.** Split the grid into P blocks, one per rank. Each rank updates only its own points. With the 7-point stencil a point on the edge of a block needs a neighbour owned by another rank. So each rank stores its block **plus one extra layer on every side** (the *ghost* or *halo* layer; see `poisson/grid.py` docstring and `plots/decomposition_halo.png`):
+**Idea.** Split the grid into P blocks, one per rank. Each rank updates only its own points. With the 7-point stencil a point on the edge of a block needs a neighbour owned by another rank. So each rank stores its block **plus one extra layer on every side** (the *ghost* or *halo* layer; see `poisson/grid.py` docstring and the figure below):
 
 - On a side that touches the physical boundary the extra layer is a **boundary layer** (fixed Dirichlet value 0).
 - On a side that touches another rank it is a **ghost layer**: a copy of the neighbour's outermost own layer.
