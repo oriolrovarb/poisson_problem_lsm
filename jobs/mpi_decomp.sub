@@ -1,0 +1,48 @@
+#BSUB -J poisson_decomp
+#BSUB -q hpcintro
+#BSUB -W 1:00
+#BSUB -M 4GB
+#BSUB -n 24
+#BSUB -R "span[hosts=1]"
+#BSUB -o jobs/output/poisson_decomp_%J.out
+#BSUB -e jobs/output/poisson_decomp_%J.err
+
+# Submit from the repo folder:  bsub < jobs/mpi_decomp.sub
+# Strong scaling on one node (same N, same iterations, same binding) for the three
+# decompositions: slab (P 1 1), pencil (Px Py 1), cube (Px Py Pz). Only the layout changes.
+
+# load the Python and MPI modules
+module load matplotlib/3.10.3-numpy-2.3.1-python-3.12.11 >& /dev/null
+module load mpi4py/4.0.3-python-3.12.11-openmpi-5.0.8 >& /dev/null
+
+# CPU type, for the report
+lscpu | grep -E "Model name|Socket|cache"
+
+N=200
+ITER=100
+REPS=3          # repeat every configuration, to see the run-to-run spread
+
+# MPI mapping options: same as mpi_strong.sub
+MOPTS="--bind-to core"
+
+# Layouts as "name:PxxPyxPz". Largest factor on axis 0 (i), whose faces are contiguous.
+# A pencil needs two cut axes and a cube three, so they only appear where that is possible.
+LAYOUTS="
+slab:1x1x1 slab:2x1x1 slab:4x1x1 slab:8x1x1 slab:12x1x1 slab:16x1x1 slab:24x1x1
+pencil:2x2x1 pencil:4x2x1 pencil:4x3x1 pencil:4x4x1 pencil:6x4x1
+cube:2x2x2 cube:3x2x2 cube:4x2x2 cube:4x3x2
+"
+
+for L in $LAYOUTS; do
+    NAME=${L%%:*}
+    GRID=${L#*:}
+    DIMS=$(echo $GRID | tr x ' ')                 # "4x3x2" -> "4 3 2"
+    NP=$(echo $DIMS | awk '{print $1*$2*$3}')
+    for REP in $(seq $REPS); do
+        # per-rank times only for the first repetition (one row set per configuration)
+        RANKCSV=""
+        [ $REP -eq 1 ] && RANKCSV="--rank-csv results/mpi_decomp_ranks_${NAME}.csv"
+        mpirun -n $NP $MOPTS python3 main_mpi_cart.py -N $N --max-iter $ITER --tol 0 \
+            --dims $DIMS --csv results/mpi_decomp.csv $RANKCSV
+    done
+done
