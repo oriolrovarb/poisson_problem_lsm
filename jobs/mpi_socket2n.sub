@@ -1,0 +1,46 @@
+#BSUB -J poisson_sock2n
+#BSUB -q hpcintro
+#BSUB -W 1:00
+#BSUB -M 4GB
+#BSUB -n 48
+#BSUB -R "span[ptile=24]"
+#BSUB -o jobs/output/poisson_sock2n_%J.out
+#BSUB -e jobs/output/poisson_sock2n_%J.err
+
+# Submit from the repo folder:  bsub < jobs/mpi_socket2n.sub
+# Slab / pencil / cube on TWO nodes (4 sockets) with ranks spread evenly over the sockets:
+#   P=24 -> 6 ranks per socket, P=48 -> 12 per socket (--map-by ppr:K:socket).
+# Differences to mpi_multinode.sub: placement is explicit per socket, per-rank compute/comm
+# times are recorded (first repetition) to see where the time goes, and N=300 is added at P=48.
+# --report-bindings (in the .err file) shows which rank sits on which socket.
+
+module load matplotlib/3.10.3-numpy-2.3.1-python-3.12.11 >& /dev/null
+module load mpi4py/4.0.3-python-3.12.11-openmpi-5.0.8 >& /dev/null
+
+lscpu | grep -E "Model name|Socket|NUMA node"
+echo "hosts: $LSB_HOSTS" | tr ' ' '\n' | sort | uniq -c
+
+ITER=100
+REPS=3
+
+# name:dims:ranks per socket:N
+CASES="
+slab:24x1x1:6:200 pencil:6x4x1:6:200 cube:4x3x2:6:200
+slab:48x1x1:12:200 pencil:8x6x1:12:200 cube:4x4x3:12:200
+slab:48x1x1:12:300 pencil:8x6x1:12:300 cube:4x4x3:12:300
+"
+
+for C in $CASES; do
+    NAME=${C%%:*}; R=${C#*:}
+    DIMS=$(echo ${R%%:*} | tr x ' '); R=${R#*:}
+    PPS=${R%%:*}
+    N=${R#*:}
+    NP=$(echo $DIMS | awk '{print $1*$2*$3}')
+    for REP in $(seq $REPS); do
+        RANKCSV=""
+        [ $REP -eq 1 ] && RANKCSV="--rank-csv results/mpi_socket2n_ranks_${NAME}.csv"
+        mpirun -n $NP --map-by ppr:$PPS:socket --bind-to core --report-bindings \
+            python3 main_mpi_cart.py -N $N --max-iter $ITER --tol 0 \
+            --dims $DIMS --csv results/mpi_socket2n.csv $RANKCSV
+    done
+done

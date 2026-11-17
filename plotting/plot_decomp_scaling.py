@@ -6,6 +6,8 @@ Reads (whichever exists) and writes to plots/:
   results/mpi_decomp.csv                         -> decomp_scaling.svg    speedup + Mlup/s vs ranks, one node
   results/mpi_placement_{core,socket}.csv        -> decomp_placement.svg  core vs socket mapping
   results/mpi_multinode.csv (+ mpi_decomp.csv)   -> decomp_multinode.svg  one node vs two nodes
+  results/mpi_socket2n*.csv                      -> decomp_socket2n.svg   two nodes, ranks spread over sockets:
+                                                    Mlup/s and compute/communication time per rank (N=200)
 Points are the mean of the repetitions; vertical bars show min..max.
 """
 import csv
@@ -161,6 +163,67 @@ def fig_multinode(one, multi):
     write("decomp_multinode.svg", svg(W, H, "One node vs two nodes (network between them), N = 200", s))
 
 
+def fig_socket2n(n=200):
+    """Left: Mlup/s per layout at P=24 and 48. Right: mean per-rank compute and comm time (stacked)."""
+    perf = defaultdict(list)
+    path = os.path.join(RESULTS, "mpi_socket2n.csv")
+    with open(path) as fh:
+        for row in csv.DictReader(fh):
+            if int(row["N"]) == n:
+                perf[(row["impl"].split("-")[1], int(row["ranks"]))].append(float(row["mlups"]))
+    times = defaultdict(lambda: [0.0, 0.0, 0])
+    for kind in COLOR:
+        with open(os.path.join(RESULTS, f"mpi_socket2n_ranks_{kind}.csv")) as fh:
+            for row in csv.DictReader(fh):
+                if int(row["N"]) == n:
+                    t = times[(kind, int(row["ranks"]))]
+                    t[0] += float(row["compute_s"]); t[1] += float(row["comm_s"]); t[2] += 1
+    Ps = [24, 48]
+    W, H, y0, h = 1160, 470, 80, 320
+    s = []
+    for panel_i, (x0, w, ylab) in enumerate(((90, 450, "Mlup/s"), (640, 450, "mean time per rank [s] (100 iterations)"))):
+        top = 1800 if panel_i == 0 else 1.0
+        s.append(f"<rect x='{x0}' y='{y0}' width='{w}' height='{h}' fill='none' stroke='#888'/>")
+        step = 300 if panel_i == 0 else 0.2
+        v = 0.0
+        while v <= top + 1e-9:
+            yy = y0 + h - v / top * h
+            s.append(f"<line x1='{x0}' y1='{yy:.1f}' x2='{x0 + w}' y2='{yy:.1f}' stroke='#e5e5e5'/>")
+            s.append(text(x0 - 8, yy + 4, f"{v:g}", 11, anchor="end", fill="#555"))
+            v += step
+        s.append(text(0, 0, ylab, 12, extra=f"transform='translate({x0 - 56},{y0 + h / 2}) rotate(-90)'"))
+        s.append(text(x0 + w / 2, y0 - 14, "Performance" if panel_i == 0 else "Where the time goes: compute (light) + communication (dark)", 14, weight="bold"))
+        gw = w / len(Ps)
+        for g, P in enumerate(Ps):
+            s.append(text(x0 + gw * (g + 0.5), y0 + h + 22, f"P = {P}", 12))
+            for j, kind in enumerate(COLOR):
+                bx = x0 + gw * g + gw * 0.12 + j * gw * 0.26
+                bw = gw * 0.22
+                if panel_i == 0:
+                    vv = perf.get((kind, P))
+                    if not vv:
+                        continue
+                    m = sum(vv) / len(vv)
+                    bh = m / top * h
+                    s.append(f"<rect x='{bx:.1f}' y='{y0 + h - bh:.1f}' width='{bw:.1f}' height='{bh:.1f}' fill='{COLOR[kind]}'/>")
+                    s.append(f"<line x1='{bx + bw / 2:.1f}' y1='{y0 + h - min(vv) / top * h:.1f}' x2='{bx + bw / 2:.1f}' "
+                             f"y2='{y0 + h - max(vv) / top * h:.1f}' stroke='#222' stroke-width='1.5'/>")
+                    s.append(text(bx + bw / 2, y0 + h - bh - 8, f"{m:.0f}", 11))
+                else:
+                    t = times.get((kind, P))
+                    if not t:
+                        continue
+                    comp, comm = t[0] / t[2], t[1] / t[2]
+                    hc, hm = comp / top * h, comm / top * h
+                    s.append(f"<rect x='{bx:.1f}' y='{y0 + h - hc:.1f}' width='{bw:.1f}' height='{hc:.1f}' fill='{COLOR[kind]}' opacity='0.45'/>")
+                    s.append(f"<rect x='{bx:.1f}' y='{y0 + h - hc - hm:.1f}' width='{bw:.1f}' height='{hm:.1f}' fill='{COLOR[kind]}'/>")
+                    s.append(text(bx + bw / 2, y0 + h - hc - hm - 8, f"{comm / (comp + comm) * 100:.0f}% comm", 11))
+        for j, kind in enumerate(COLOR):
+            s.append(f"<rect x='{x0 + 14 + j * 90}' y='{y0 + 10}' width='14' height='14' fill='{COLOR[kind]}'/>")
+            s.append(text(x0 + 34 + j * 90, y0 + 22, kind, 12, anchor="start"))
+    write("decomp_socket2n.svg", svg(W, H, f"Two nodes, ranks spread over the four sockets, N = {n}", s))
+
+
 if __name__ == "__main__":
     one = load("mpi_decomp.csv")
     if one:
@@ -171,3 +234,5 @@ if __name__ == "__main__":
     multi = load("mpi_multinode.csv")
     if one and multi:
         fig_multinode(one, multi)
+    if os.path.exists(os.path.join(RESULTS, "mpi_socket2n.csv")):
+        fig_socket2n()
