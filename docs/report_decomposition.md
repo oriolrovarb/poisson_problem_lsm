@@ -71,7 +71,7 @@ Two nodes (2 x 24 cores), 6 ranks per socket at P=24 and 12 per socket at P=48 (
 | 24 | 1094 | 1190 | 1163 |
 | 48 | 1387 | 1610 | 1540 |
 
-Relative to the single rank this is a speedup of 25 / 26 / 25 at P=24 and 30 / 35 / 33 at P=48 (best efficiency 72 % at P=48). Here the layouts separate: the slab is 8 % behind the best at P=24 and 14 % behind at P=48. Pencil and cube are within 4-5 % of each other, with the pencil ahead.
+Relative to the single rank this is a speedup of 24 / 26 / 25 at P=24 and 30 / 35 / 33 at P=48 (best efficiency 72 % at P=48). Here the layouts separate: the slab is 8 % behind the best at P=24 and 14 % behind at P=48. Pencil and cube are within 4-5 % of each other, with the pencil ahead.
 
 Per-rank time split (first repetition, mean over ranks, N=200). "Communication" includes waiting for neighbours.
 
