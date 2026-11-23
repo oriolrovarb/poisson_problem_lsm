@@ -22,5 +22,10 @@ def parse_args():
                         help="MPI only: append one row per rank (compute/comm time) to this CSV file")
     parser.add_argument("--slice", default=None,
                         help="save the middle z-slice of u to this .npy file")
+    parser.add_argument("--numba", action="store_true",
+                        help="use the Numba kernels (threaded with prange)")
+    parser.add_argument("--threads", type=int, default=1,
+                        help="number of Numba threads per rank (only with --numba)")
+
     return parser.parse_args()
 
