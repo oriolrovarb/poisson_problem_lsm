@@ -24,3 +24,14 @@ def diff_sq(u, u_new):
                 s+= (u_new[i,j,k] - u[i,j,k])**2
 
     return s
+
+def warmup():
+    """Compile both kernels on a tiny array.
+
+    Must be called BEFORE mpi4py is imported: on DTU HPC, compiling a Numba
+    function after MPI_Init crashes with a segmentation fault.
+    """
+    import numpy as np
+    a = np.zeros((4, 4, 4))
+    jacobi_step(a, a.copy(), a, 1.0)
+    diff_sq(a, a.copy())

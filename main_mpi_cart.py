@@ -1,4 +1,9 @@
 """Entry point: MPI Jacobi solver, 3D Cartesian decomposition (slab, pencil or cube, set by --dims)."""
+import sys
+if "--numba" in sys.argv:
+    # compile the Numba kernels BEFORE mpi4py starts MPI (see jacobi_numba.warmup)
+    from poisson.jacobi_numba import warmup
+    warmup()
 from mpi4py import MPI
 
 from poisson.args import parse_args
@@ -61,11 +66,6 @@ def main():
         times["compute"] += t_b - t_a
         times["comm"] += t_c - t_b
         return total
-
-    # compile the Numba kernels before timing (cheap no-op for NumPy)
-    w, w_new, w_f = allocate((4, 4, 4))
-    jacobi_step(w, w_new, w_f, 1.0)
-    diff_sq(w, w_new)
 
     # 4. Jacobi iterations: the ONLY timed part; all ranks start together
     cart.Barrier()
