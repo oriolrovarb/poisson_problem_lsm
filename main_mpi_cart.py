@@ -13,6 +13,12 @@ from poisson.decomposition import cart_communicator, block_range, exchange_halos
 def main():
     # 1. run-time parameters, line of ranks and my slices
     args = parse_args()
+    if args.numba:
+        import numba
+        from poisson.jacobi_numba import jacobi_step, diff_sq
+        numba.set_num_threads(args.threads)
+    else:
+        from poisson.jacobi import jacobi_step, diff_sq
     N = args.N
     delta = grid_spacing(N)
     x = coordinates(N)
@@ -56,6 +62,11 @@ def main():
         times["comm"] += t_c - t_b
         return total
 
+    # compile the Numba kernels before timing (cheap no-op for NumPy)
+    w, w_new, w_f = allocate((4, 4, 4))
+    jacobi_step(w, w_new, w_f, 1.0)
+    diff_sq(w, w_new)
+
     # 4. Jacobi iterations: the ONLY timed part; all ranks start together
     cart.Barrier()
     t0 = MPI.Wtime()
@@ -72,9 +83,10 @@ def main():
             report_ranks(rank_rows, args.rank_csv)
         n_split = sum(d > 1 for d in dims)
         kind = {0: "slab", 1: "slab", 2: "pencil", 3: "cube"}[n_split]
-        impl = f"mpi-{kind}-{'x'.join(map(str, dims))}"
+        prefix = "hybrid" if args.numba else "mpi"
+        impl = f"{prefix}-{kind}-{'x'.join(map(str, dims))}"
         mlups, gbs = performance(N, iterations, seconds)
-        report(dict(impl=impl, N=N, ranks=P, threads=1,
+        report(dict(impl=impl, N=N, ranks=P, threads=args.threads if args.numba else 1,
                     iterations=iterations, max_iter=args.max_iter, tol=args.tol,
                     check_every=args.check_every, time_s=seconds, mlups=mlups,
                     gbs=gbs, final_diff=diff, max_error=error),
