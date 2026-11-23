@@ -17,6 +17,7 @@ lscpu | grep -E "Model name|Socket|cache"
 
 N=200
 ITER=100
+REPS=3          # repeat every configuration, to see the run-to-run spread
 
 # "ranks x threads": first 1 rank with more threads, then mixes that use all 24 cores
 RUNS="1x1 1x2 1x4 1x8 1x12 1x16 1x24 24x1 12x2 8x3 6x4 4x6 2x12"
@@ -24,8 +25,17 @@ RUNS="1x1 1x2 1x4 1x8 1x12 1x16 1x24 24x1 12x2 8x3 6x4 4x6 2x12"
 for RUN in $RUNS; do
     R=${RUN%x*}
     T=${RUN#*x}
-    # each rank gets T cores, so Numba can start T threads
-    mpirun -n $R --map-by slot:PE=$T --bind-to core \
-        python3 main_mpi_cart.py -N $N --max-iter $ITER --tol 0 \
-        --dims $R 1 1 --numba --threads $T --csv results/hybrid.csv
+    # Each rank gets T cores, so Numba can start T threads. A node has 2 sockets
+    # of 12 cores, and OpenMPI refuses to bind one rank to cores on both sockets,
+    # so a rank with more than 12 threads is not bound (it may use the whole node).
+    if [ $T -gt 12 ]; then
+        BIND="--bind-to none"
+    else
+        BIND="--map-by slot:PE=$T --bind-to core"
+    fi
+    for REP in $(seq $REPS); do
+        mpirun -n $R $BIND \
+            python3 main_mpi_cart.py -N $N --max-iter $ITER --tol 0 \
+            --dims $R 1 1 --numba --threads $T --csv results/hybrid.csv
+    done
 done

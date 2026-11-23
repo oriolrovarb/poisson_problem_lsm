@@ -114,3 +114,12 @@ def exchange_halos_nd(cart, u, neighbours):
                       recvbuf=recv, source=upper)
         if upper != MPI.PROC_NULL:
             u[face(-1)] = recv
+
+def exchange_halos_nonblocking(cart, u, lower, upper):
+    reqs = [
+        cart.Irecv(u[-1], source = upper),
+        cart.Isend(u[-2], dest=upper),
+        cart.Irecv(u[0], source = lower),
+        cart.Isend(u[1], dest=lower),
+    ]
+    return reqs

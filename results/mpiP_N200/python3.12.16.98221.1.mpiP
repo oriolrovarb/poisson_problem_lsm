@@ -1,0 +1,101 @@
+@ mpiP
+@ Command : python3 main_mpi.py -N 200 --max-iter 100 --tol 0 
+@ Version                  : 3.5.0
+@ MPIP Build date          : Aug 19 2025, 13:33:55
+@ Start time               : 2026 11 15 23:19:37
+@ Stop time                : 2026 11 15 23:19:39
+@ Timer Used               : PMPI_Wtime
+@ MPIP env var             : -d -f results/mpiP_N200
+@ Collector Rank           : 0
+@ Collector PID            : 98221
+@ Final Output Dir         : results/mpiP_N200
+@ Report generation        : Single collector task
+@ MPI Task Assignment      : 0 n-62-21-47
+@ MPI Task Assignment      : 1 n-62-21-47
+@ MPI Task Assignment      : 2 n-62-21-47
+@ MPI Task Assignment      : 3 n-62-21-47
+@ MPI Task Assignment      : 4 n-62-21-47
+@ MPI Task Assignment      : 5 n-62-21-47
+@ MPI Task Assignment      : 6 n-62-21-47
+@ MPI Task Assignment      : 7 n-62-21-47
+@ MPI Task Assignment      : 8 n-62-21-47
+@ MPI Task Assignment      : 9 n-62-21-47
+@ MPI Task Assignment      : 10 n-62-21-47
+@ MPI Task Assignment      : 11 n-62-21-47
+@ MPI Task Assignment      : 12 n-62-21-47
+@ MPI Task Assignment      : 13 n-62-21-47
+@ MPI Task Assignment      : 14 n-62-21-47
+@ MPI Task Assignment      : 15 n-62-21-47
+
+---------------------------------------------------------------------------
+@--- MPI Time (seconds) ---------------------------------------------------
+---------------------------------------------------------------------------
+Task    AppTime    MPITime     MPI%
+   0       1.88     0.0878     4.67
+   1       1.88     0.0746     3.97
+   2       1.88     0.0442     2.35
+   3       1.88     0.0889     4.73
+   4       1.88     0.0702     3.73
+   5       1.88     0.0775     4.12
+   6       1.88     0.0447     2.38
+   7       1.88     0.0796     4.23
+   8       1.88      0.788    41.88
+   9       1.88      0.761    40.45
+  10       1.88      0.813    43.24
+  11       1.88       0.83    44.13
+  12       1.88      0.804    42.77
+  13       1.88      0.841    44.72
+  14       1.88      0.762    40.51
+  15       1.88      0.765    40.69
+   *       30.1       6.93    23.04
+---------------------------------------------------------------------------
+@--- Aggregate Time (top twenty, descending, milliseconds) ----------------
+---------------------------------------------------------------------------
+Call                 Site       Time    App%    MPI%      Count    COV
+Sendrecv              112        801    2.66   11.56        200   0.00
+Sendrecv              191        773    2.57   11.16        200   0.00
+Sendrecv              299        766    2.55   11.05        200   0.00
+Sendrecv               58        756    2.51   10.91        200   0.00
+Sendrecv              164        752    2.50   10.85        200   0.00
+Sendrecv              218        741    2.46   10.69        200   0.00
+Sendrecv               31        716    2.38   10.33        200   0.00
+Sendrecv              139        710    2.36   10.24        200   0.00
+Sendrecv              326       76.6    0.25    1.10        200   0.00
+Sendrecv              353       71.6    0.24    1.03        200   0.00
+Sendrecv                6       70.7    0.24    1.02        200   0.00
+Sendrecv              272       64.4    0.21    0.93        200   0.00
+Sendrecv              407       53.4    0.18    0.77        200   0.00
+Sendrecv              245       47.4    0.16    0.68        200   0.00
+Cart_create           189         38    0.13    0.55          1   0.00
+Cart_create            54       35.7    0.12    0.52          1   0.00
+Comm_dup              157       33.1    0.11    0.48          1   0.00
+Comm_dup               51       32.3    0.11    0.47          1   0.00
+Sendrecv               85       30.7    0.10    0.44        200   0.00
+Cart_create           243       29.8    0.10    0.43          1   0.00
+---------------------------------------------------------------------------
+@--- Aggregate Sent Message Size (top twenty, descending, bytes) ----------
+---------------------------------------------------------------------------
+Call                 Site      Count      Total       Avrg  Sent%
+Sendrecv               85        200   6.53e+07   3.26e+05   6.67
+Sendrecv              326        200   6.53e+07   3.26e+05   6.67
+Sendrecv              112        200   6.53e+07   3.26e+05   6.67
+Sendrecv              380        200   6.53e+07   3.26e+05   6.67
+Sendrecv              353        200   6.53e+07   3.26e+05   6.67
+Sendrecv              272        200   6.53e+07   3.26e+05   6.67
+Sendrecv               31        200   6.53e+07   3.26e+05   6.67
+Sendrecv               58        200   6.53e+07   3.26e+05   6.67
+Sendrecv              299        200   6.53e+07   3.26e+05   6.67
+Sendrecv              218        200   6.53e+07   3.26e+05   6.67
+Sendrecv              245        200   6.53e+07   3.26e+05   6.67
+Sendrecv              407        200   6.53e+07   3.26e+05   6.67
+Sendrecv              191        200   6.53e+07   3.26e+05   6.67
+Sendrecv              164        200   6.53e+07   3.26e+05   6.67
+Sendrecv                6        200   3.26e+07   1.63e+05   3.33
+Sendrecv              139        200   3.26e+07   1.63e+05   3.33
+Send                  153          8        168         21   0.00
+Send                  127          6        126         21   0.00
+Send                  262          6        126         21   0.00
+Send                   47          6        126         21   0.00
+---------------------------------------------------------------------------
+@--- End of Report --------------------------------------------------------
+---------------------------------------------------------------------------

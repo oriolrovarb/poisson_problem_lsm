@@ -7,7 +7,7 @@ from poisson.problem import source_term, max_error, apply_dirichlet
 from poisson.jacobi import jacobi, jacobi_step, diff_sq
 from poisson.metrics import performance
 from poisson.output import report, report_ranks
-from poisson.decomposition import slab_communicator, slab_range, exchange_halos
+from poisson.decomposition import slab_communicator, slab_range
 
 
 def main():
@@ -31,18 +31,43 @@ def main():
     apply_dirichlet(u)
     apply_dirichlet(u_new)
 
-    # Per-rank time split, for the load-balance plot. "comm" includes waiting
-    # for neighbours, so an overloaded neighbour shows up as comm time here.
+    # Per-rank time split for the load-balance plot. Communication records
+    # posting plus exposed wait time; work overlapped with transfers is compute.
     times = {"compute": 0.0, "comm": 0.0}
 
     def mpi_step(u, u_new, f, delta2):
-        t_a = MPI.Wtime()
-        exchange_halos(cart, u, lower, upper)
-        t_b = MPI.Wtime()
-        jacobi_step(u, u_new, f, delta2)
-        t_c = MPI.Wtime()
-        times["comm"] += t_b - t_a
-        times["compute"] += t_c - t_b
+        t_start = MPI.Wtime()
+        requests = [
+            cart.Irecv(u[0], source=lower, tag=0),
+            cart.Irecv(u[-1], source=upper, tag=1),
+            cart.Isend(u[-2], dest=upper, tag=0),
+            cart.Isend(u[1], dest=lower, tag=1),
+        ]
+
+        # Update planes that do not depend on halo data while transfers progress.
+        inner_compute = 0.0
+        if n_local > 2:
+            t_compute = MPI.Wtime()
+            jacobi_step(u[1:-1], u_new[1:-1], f[1:-1], delta2)
+            inner_compute = MPI.Wtime() - t_compute
+
+        MPI.Request.Waitall(requests)
+        t_halos_ready = MPI.Wtime()
+
+        # Boundary ranks need the received halo values. With one local plane,
+        # compute it only once because it is both boundaries.
+        t_compute = MPI.Wtime()
+        if n_local == 1:
+            jacobi_step(u, u_new, f, delta2)
+        else:
+            jacobi_step(u[:3], u_new[:3], f[:3], delta2)
+            jacobi_step(u[-3:], u_new[-3:], f[-3:], delta2)
+        boundary_compute = MPI.Wtime() - t_compute
+
+        times["compute"] += inner_compute + boundary_compute
+        # Exposed communication time excludes the interior work overlapped
+        # with communication, keeping the per-rank time split additive.
+        times["comm"] += t_halos_ready - t_start - inner_compute
 
     def mpi_diff_sq(u, u_new):
         t_a = MPI.Wtime()

@@ -1,0 +1,317 @@
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+/zhome/de/c/223411/.lsbatch/1794922705.30097220.shell: line 31: results/mpi_nonblocking_ranks.csv: No such file or directory
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+--------------------------------------------------------------------------
+prterun detected that one or more processes exited with non-zero status,
+thus causing the job to be terminated. The first process to do so was:
+
+   Process name: [prterun-n-62-21-75-626538@1,1]
+   Exit code:    2
+--------------------------------------------------------------------------
+/zhome/de/c/223411/.lsbatch/1794922705.30097220.shell: line 31: results/mpi_nonblocking_ranks.csv: No such file or directory
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+--------------------------------------------------------------------------
+prterun detected that one or more processes exited with non-zero status,
+thus causing the job to be terminated. The first process to do so was:
+
+   Process name: [prterun-n-62-21-75-626549@1,3]
+   Exit code:    2
+--------------------------------------------------------------------------
+/zhome/de/c/223411/.lsbatch/1794922705.30097220.shell: line 31: results/mpi_nonblocking_ranks.csv: No such file or directory
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+--------------------------------------------------------------------------
+prterun detected that one or more processes exited with non-zero status,
+thus causing the job to be terminated. The first process to do so was:
+
+   Process name: [prterun-n-62-21-75-626565@1,7]
+   Exit code:    2
+--------------------------------------------------------------------------
+/zhome/de/c/223411/.lsbatch/1794922705.30097220.shell: line 31: results/mpi_nonblocking_ranks.csv: No such file or directory
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+--------------------------------------------------------------------------
+prterun detected that one or more processes exited with non-zero status,
+thus causing the job to be terminated. The first process to do so was:
+
+   Process name: [prterun-n-62-21-75-626595@1,6]
+   Exit code:    2
+--------------------------------------------------------------------------
+/zhome/de/c/223411/.lsbatch/1794922705.30097220.shell: line 31: results/mpi_nonblocking_ranks.csv: No such file or directory
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+--------------------------------------------------------------------------
+prterun detected that one or more processes exited with non-zero status,
+thus causing the job to be terminated. The first process to do so was:
+
+   Process name: [prterun-n-62-21-75-626635@1,13]
+   Exit code:    2
+--------------------------------------------------------------------------
+/zhome/de/c/223411/.lsbatch/1794922705.30097220.shell: line 31: results/mpi_nonblocking_ranks.csv: No such file or directory
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+usage: mpi_nonblocking.py [-h] [-N N] [--max-iter MAX_ITER] [--tol TOL]
+                          [--check-every CHECK_EVERY] [--csv CSV]
+                          [--rank-csv RANK_CSV] [--slice SLICE]
+mpi_nonblocking.py: error: argument --rank-csv: expected one argument
+--------------------------------------------------------------------------
+prterun detected that one or more processes exited with non-zero status,
+thus causing the job to be terminated. The first process to do so was:
+
+   Process name: [prterun-n-62-21-75-626690@1,9]
+   Exit code:    2
+--------------------------------------------------------------------------
+/zhome/de/c/223411/.lsbatch/1794922705.30097220.shell: line 31: results/mpi_nonblocking_ranks.csv: No such file or directory
