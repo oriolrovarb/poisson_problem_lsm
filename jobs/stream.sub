@@ -1,0 +1,38 @@
+#BSUB -J stream
+#BSUB -q hpcintro
+#BSUB -W 0:30
+#BSUB -M 4GB
+#BSUB -n 24
+#BSUB -R "span[hosts=1]"
+#BSUB -o jobs/output/stream_%J.out
+#BSUB -e jobs/output/stream_%J.err
+
+# Submit from the repo folder:  bsub < jobs/stream.sub
+# Achievable memory bandwidth of one node (STREAM), for 1-24 threads, with
+#   close  : threads fill socket 0 first, then socket 1  (like mpirun --map-by core)
+#   spread : threads alternate between the two sockets   (like mpirun --map-by socket)
+# -n 24 on one host = the whole node, so no other job shares the memory bandwidth.
+
+# CPU type and which cores belong to which socket, for the report
+lscpu | grep -E "Model name|Socket|NUMA node|L3"
+
+# compile on the compute node (-march=native); 320 MB per array >> 2 x 30 MB L3
+gcc -O3 -march=native -fopenmp -DSTREAM_ARRAY_SIZE=40000000 -DNTIMES=20 \
+    benchmarks/stream.c -o benchmarks/stream || exit 1
+
+CSV=results/stream.csv
+[ -f $CSV ] || echo "binding,threads,kernel,best_MBs" > $CSV
+
+export OMP_PLACES=cores
+export OMP_DISPLAY_AFFINITY=true     # prints each thread's core to the .out file
+
+for BIND in close spread; do
+    for T in 1 2 4 8 12 16 20 24; do
+        echo "=== binding=$BIND threads=$T ==="
+        OMP_PROC_BIND=$BIND OMP_NUM_THREADS=$T ./benchmarks/stream | tee stream_tmp.txt
+        # STREAM result lines look like:  "Triad:   23456.7   0.0123 ..."  (best rate in MB/s)
+        awk -v b=$BIND -v t=$T '/^(Copy|Scale|Add|Triad):/ {sub(":", "", $1); print b "," t "," $1 "," $2}' \
+            stream_tmp.txt >> $CSV
+    done
+done
+rm -f stream_tmp.txt
