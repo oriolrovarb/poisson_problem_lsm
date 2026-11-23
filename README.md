@@ -49,6 +49,7 @@ Submit from the repo folder; output files go to `jobs/output/`, results to `resu
 ```shell
 bsub < jobs/baseline.sub     # sequential, fixed iterations over a range of N
 bsub < jobs/mpi_strong.sub   # MPI strong scaling on one node, 1-24 ranks
+bsub < jobs/stream.sub       # STREAM memory bandwidth, 1-24 threads, close vs spread
 bjobs                        # job status
 ```
 
@@ -60,6 +61,7 @@ Each script reads a CSV from `results/` and writes PNG files to `plots/`:
 python3 plotting/plot_baseline.py results/baseline.csv               # Mlup/s vs N, with cache sizes
 python3 plotting/plot_scaling.py results/mpi_strong.csv              # time, speedup, efficiency vs ranks
 python3 plotting/plot_load_balance.py results/mpi_strong_ranks.csv   # compute/communication time per rank
+python3 plotting/plot_bandwidth.py                                   # STREAM vs solver GB/s, with hardware peak
 ```
 
 ## Files
