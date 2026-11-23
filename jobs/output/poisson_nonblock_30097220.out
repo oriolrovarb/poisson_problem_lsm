@@ -1,0 +1,87 @@
+Model name:                              Intel(R) Xeon(R) CPU E5-2650 v4 @ 2.20GHz
+L1d cache:                               768 KiB (24 instances)
+L1i cache:                               768 KiB (24 instances)
+L2 cache:                                6 MiB (24 instances)
+L3 cache:                                60 MiB (2 instances)
+Executant No-Blocking bàsic amb 1 ranks...
+Executant No-Blocking bàsic amb 2 ranks...
+Executant No-Blocking bàsic amb 4 ranks...
+Executant No-Blocking bàsic amb 8 ranks...
+Executant No-Blocking bàsic amb 12 ranks...
+Executant No-Blocking bàsic amb 16 ranks...
+Executant No-Blocking bàsic amb 24 ranks...
+
+------------------------------------------------------------
+Sender: LSF System <lsfadmin@hpc.dtu.dk>
+Subject: Job 30097220: <poisson_nonblock> in cluster <dcc> Exited
+
+Job <poisson_nonblock> was submitted from host <n-62-30-5> by user <s253168> in cluster <dcc> at Tue Nov 17 14:38:25 2026
+Job was executed on host(s) <24*n-62-21-75>, in queue <hpcintro>, as user <s253168> in cluster <dcc> at Tue Nov 17 14:38:28 2026
+</zhome/de/c/223411> was used as the home directory.
+</zhome/de/c/223411/02616_LSM/poisson_problem_lsm> was used as the working directory.
+Started at Tue Nov 17 14:38:28 2026
+Terminated at Tue Nov 17 14:38:35 2026
+Results reported at Tue Nov 17 14:38:35 2026
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+#!/bin/bash
+#BSUB -J poisson_nonblock                                                                                      
+#BSUB -q hpcintro                                                                                              
+#BSUB -W 1:00
+#BSUB -M 4GB                                                                                                   
+#BSUB -n 24                                                                                                    
+#BSUB -R "span[hosts=1]"                                                                                       
+#BSUB -o jobs/output/poisson_nonblock_%J.out
+#BSUB -e jobs/output/poisson_nonblock_%J.err
+
+mkdir -p results jobs/output
+
+module load matplotlib/3.10.3-numpy-2.3.1-python-3.12.11 >& /dev/null
+module load mpi4py/4.0.3-python-3.12.11-openmpi-5.0.8 >& /dev/null
+
+lscpu | grep -E "Model name|cache"
+                                                                                    
+N=200
+ITER=100
+RANKS="1 2 4 8 12 16 24"
+MOPTS="--bind-to core"
+
+CSV_OUT="results/mpi_nonblocking.csv"
+CSV_RANKS="results/mpi_nonblocking_ranks.csv"
+
+rm -f $CSV_OUT $CSV_RANKS
+
+for NP in $RANKS; do
+    echo "Executant No-Blocking bàsic amb $NP ranks..."
+    mpirun -n $NP $MOPTS python3 mpi_nonblocking.py -N $N --max-iter $ITER --tol 0 --csv $CSV_OUT --rank-csv   
+    $CSV_RANKS
+done
+
+------------------------------------------------------------
+
+Exited with exit code 127.
+
+Resource usage summary:
+
+    CPU time :                                   21.62 sec.
+    Max Memory :                                 -
+    Average Memory :                             -
+    Total Requested Memory :                     98304.00 MB
+    Delta Memory :                               -
+    Max Swap :                                   -
+    Max Processes :                              -
+    Max Threads :                                -
+    Run time :                                   7 sec.
+    Turnaround time :                            10 sec.
+
+The output (if any) is above this job summary.
+
+
+
+PS:
+
+Read file <jobs/output/poisson_nonblock_30097220.err> for stderr output of this job.
+

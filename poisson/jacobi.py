@@ -73,3 +73,44 @@ def jacobi(u, u_new, f, delta, max_iter, tol, check_every=1,
         if check and diff < tol:
             break
     return u, it, diff
+    
+def jacobi_step_interior(u, u_new, f, delta2):
+        """Update interior slices(de 2 a n_local - 1).              
+        """
+        if u.shape[0] > 4:  # interior if n_local >= 3                                                 
+            u_new[2:-2, 1:-1, 1:-1] = (1/6.0) * (
+                u[1:-3, 1:-1, 1:-1]
+                + u[3:-1, 1:-1, 1:-1]
+                + u[2:-2, :-2, 1:-1]
+                + u[2:-2, 2:, 1:-1]
+                + u[2:-2, 1:-1, :-2]
+                + u[2:-2, 1:-1, 2:]
+                + delta2 * f[2:-2, 1:-1, 1:-1]
+            )
+  
+
+def jacobi_step_boundaries(u, u_new, f, delta2):
+    """Update interior slices (1 i -2).
+    """
+    n_local = u.shape[0] - 2
+                                              
+    u_new[1:2, 1:-1, 1:-1] = (1/6.0) * (
+        u[0:1, 1:-1, 1:-1]
+        + u[2:3, 1:-1, 1:-1]
+        + u[1:2, :-2, 1:-1]
+        + u[1:2, 2:, 1:-1]
+        + u[1:2, 1:-1, :-2]
+        + u[1:2, 1:-1, 2:]
+        + delta2 * f[1:2, 1:-1, 1:-1]
+    )
+                             
+    if n_local > 1:
+        u_new[-2:-1, 1:-1, 1:-1] = (1/6.0) * (
+            u[-3:-2, 1:-1, 1:-1]
+            + u[-1:, 1:-1, 1:-1]
+            + u[-2:-1, :-2, 1:-1]
+            + u[-2:-1, 2:, 1:-1]
+            + u[-2:-1, 1:-1, :-2]
+            + u[-2:-1, 1:-1, 2:]
+            + delta2 * f[-2:-1, 1:-1, 1:-1]
+        )

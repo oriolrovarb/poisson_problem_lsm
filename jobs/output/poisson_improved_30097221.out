@@ -1,0 +1,94 @@
+Model name:                              Intel(R) Xeon(R) CPU E5-2650 v4 @ 2.20GHz
+L1d cache:                               768 KiB (24 instances)
+L1i cache:                               768 KiB (24 instances)
+L2 cache:                                6 MiB (24 instances)
+L3 cache:                                60 MiB (2 instances)
+Executant No-Blocking millorat (overlap) amb 1 ranks...
+[mpi-slab] N=200 ranks=1 threads=1 | iterations=100 | time=16.836 s | 47.52 Mlup/s (3.04 GB/s) | final diff=nan | max error=9.52e-01
+Executant No-Blocking millorat (overlap) amb 2 ranks...
+[mpi-slab] N=200 ranks=2 threads=1 | iterations=100 | time=7.580 s | 105.54 Mlup/s (6.75 GB/s) | final diff=nan | max error=9.52e-01
+Executant No-Blocking millorat (overlap) amb 4 ranks...
+[mpi-slab] N=200 ranks=4 threads=1 | iterations=100 | time=4.135 s | 193.49 Mlup/s (12.38 GB/s) | final diff=nan | max error=9.52e-01
+Executant No-Blocking millorat (overlap) amb 8 ranks...
+[mpi-slab] N=200 ranks=8 threads=1 | iterations=100 | time=2.894 s | 276.42 Mlup/s (17.69 GB/s) | final diff=nan | max error=9.52e-01
+Executant No-Blocking millorat (overlap) amb 12 ranks...
+[mpi-slab] N=200 ranks=12 threads=1 | iterations=100 | time=2.629 s | 304.34 Mlup/s (19.48 GB/s) | final diff=nan | max error=9.52e-01
+Executant No-Blocking millorat (overlap) amb 16 ranks...
+[mpi-slab] N=200 ranks=16 threads=1 | iterations=100 | time=1.937 s | 413.08 Mlup/s (26.44 GB/s) | final diff=nan | max error=9.52e-01
+Executant No-Blocking millorat (overlap) amb 24 ranks...
+[mpi-slab] N=200 ranks=24 threads=1 | iterations=100 | time=1.101 s | 726.74 Mlup/s (46.51 GB/s) | final diff=nan | max error=9.52e-01
+
+------------------------------------------------------------
+Sender: LSF System <lsfadmin@hpc.dtu.dk>
+Subject: Job 30097221: <poisson_improved> in cluster <dcc> Exited
+
+Job <poisson_improved> was submitted from host <n-62-30-5> by user <s253168> in cluster <dcc> at Tue Nov 17 14:38:32 2026
+Job was executed on host(s) <24*n-62-21-77>, in queue <hpcintro>, as user <s253168> in cluster <dcc> at Tue Nov 17 14:38:34 2026
+</zhome/de/c/223411> was used as the home directory.
+</zhome/de/c/223411/02616_LSM/poisson_problem_lsm> was used as the working directory.
+Started at Tue Nov 17 14:38:34 2026
+Terminated at Tue Nov 17 14:39:19 2026
+Results reported at Tue Nov 17 14:39:19 2026
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+#!/bin/bash
+#BSUB -J poisson_improved                                                                                      
+#BSUB -q hpcintro                                                                                              
+#BSUB -W 1:00                                                                                                  
+#BSUB -M 4GB                                                                                                   
+#BSUB -n 24
+#BSUB -R "span[hosts=1]"
+#BSUB -o jobs/output/poisson_improved_%J.out
+#BSUB -e jobs/output/poisson_improved_%J.err                                                                   
+
+mkdir -p results jobs/output
+
+module load matplotlib/3.10.3-numpy-2.3.1-python-3.12.11 >& /dev/null
+module load mpi4py/4.0.3-python-3.12.11-openmpi-5.0.8 >& /dev/null
+                                                                                                                                                                                        
+lscpu | grep -E "Model name|cache"
+                                                                                                                                                                                                 
+N=200
+ITER=100
+RANKS="1 2 4 8 12 16 24"
+MOPTS="--bind-to core"
+
+CSV_OUT="results/mpi_nonblocking_improved.csv"
+CSV_RANKS="results/mpi_nonblocking_improved_ranks.csv"
+
+rm -f $CSV_OUT $CSV_RANKS
+
+for NP in $RANKS; do
+    echo "Executant No-Blocking millorat (overlap) amb $NP ranks..."
+    mpirun -n $NP $MOPTS python3 mpi_nonblocking_improved.py -N $N --max-iter $ITER --tol 0 --csv $CSV_OUT     
+    --rank-csv $CSV_RANKS
+done
+
+------------------------------------------------------------
+
+Exited with exit code 127.
+
+Resource usage summary:
+
+    CPU time :                                   193.25 sec.
+    Max Memory :                                 415 MB
+    Average Memory :                             415.00 MB
+    Total Requested Memory :                     98304.00 MB
+    Delta Memory :                               97889.00 MB
+    Max Swap :                                   -
+    Max Processes :                              5
+    Max Threads :                                10
+    Run time :                                   45 sec.
+    Turnaround time :                            47 sec.
+
+The output (if any) is above this job summary.
+
+
+
+PS:
+
+Read file <jobs/output/poisson_improved_30097221.err> for stderr output of this job.
+
