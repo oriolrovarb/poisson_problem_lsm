@@ -10,15 +10,16 @@
 # Submit from the repo folder:  bsub < jobs/warmup.sub
 # How many iterations until Mlup/s stops rising ("the car reaches top speed")?
 # Hybrid Numba, 24 ranks x 1 thread (slab), for several N and iteration counts.
-# Memory (3 arrays of (N+2)^3 doubles): N=200 0.2 GB, 400 1.6 GB, 600 5.2 GB, 800 12.4 GB
-# in total, i.e. about 8 MB, 65 MB, 220 MB and 520 MB per rank.
+# Memory (3 arrays of (N+2)^3 doubles): N=200 0.2 GB, 400 1.6 GB, 600 5.2 GB, 800 12.4 GB,
+# 1000 24.1 GB in total, i.e. about 8 MB, 65 MB, 220 MB, 520 MB and 1 GB per rank.
+# Only some N:  NS="1000" bsub < jobs/warmup.sub   (LSF passes the variable on to the job)
 
 module load matplotlib/3.10.3-numpy-2.3.1-python-3.12.11 >& /dev/null
 module load mpi4py/4.0.3-python-3.12.11-openmpi-5.0.8 >& /dev/null
 
 lscpu | grep -E "Model name|Socket|cache"
 
-NS="200 400 600 800"
+NS=${NS:-"200 400 600 800 1000"}
 ITERS="1 2 5 10 20 50"
 REPS=3          # repeat every configuration, to see the run-to-run spread
 R=24
