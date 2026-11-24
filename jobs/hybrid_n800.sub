@@ -1,7 +1,7 @@
 #BSUB -J poisson_hybrid_n800
 #BSUB -q hpcintro
 #BSUB -W 1:00
-#BSUB -M 16GB
+#BSUB -M 8GB
 #BSUB -n 24
 #BSUB -R "span[hosts=1]"
 #BSUB -o jobs/output/poisson_hybrid_n800_%J.out
@@ -12,7 +12,8 @@
 # that measures memory speed instead of start-up cost: N=800, 5 iterations
 # (see plots/warmup.svg: from N=800 on, 5 iterations are within 1 % of top speed).
 # Data: 3 arrays of 802^3 doubles = 12.4 GB in total. With 1 rank that is one process
-# of 12.4 GB, hence -M 16GB instead of 4GB.
+# of 12.4 GB. -M is per slot: 8 GB x 24 slots = 192 GB, which fits a node (251 GB).
+# (-M 16GB asked for 384 GB and the job never started.)
 # --report-bindings prints the cores each rank is bound to (in the .err file).
 # A NumPy run on 24 ranks at the same N is the reference for the hybrid runs.
 
