@@ -3,7 +3,7 @@
 Usage (from the repo folder):  python3 plotting/plot_hybrid.py
 Reads   results/hybrid.csv       (jobs/hybrid.sub, Numba kernels, slab decomposition)
         results/mpi_nonblocking_improved.csv   (NumPy kernels, non-blocking MPI, 24 ranks, reference)
-Writes  plots/hybrid.png
+Writes  plots/hybrid.svg
 
 Left:  strong scaling speedup T(1)/T(t) of 1 rank with t Numba threads, log-log,
        with the ideal line S = t.
@@ -79,6 +79,6 @@ ax2.legend(loc="upper center", bbox_to_anchor=(0.5, -0.15), fontsize="small")
 fig.suptitle("Hybrid MPI + Numba — Xeon E5-2650 v4, 2 sockets × 12 cores, slab decomposition")
 fig.tight_layout()
 os.makedirs("plots", exist_ok=True)
-fig.savefig("plots/hybrid.png", bbox_inches="tight", dpi=150)
+fig.savefig("plots/hybrid.svg", bbox_inches="tight")
 plt.close(fig)
-print("wrote plots/hybrid.png")
+print("wrote plots/hybrid.svg")
