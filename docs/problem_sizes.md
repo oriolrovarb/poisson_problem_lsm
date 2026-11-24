@@ -1,6 +1,6 @@
 # Problem size N per experiment
 
-All timing runs: `--max-iter 100 --tol 0`. Hardware (hpcintro): 6 nodes, each 2 × Xeon E5-2650 v4
+All timing runs: `--max-iter 100 --tol 0`, except one-node hybrid (5 iterations, see table). Hardware (hpcintro): 6 nodes, each 2 × Xeon E5-2650 v4
 (24 cores, L3 = 2 × 30 MB = **60 MB per node**), jobs use `-M 4GB` per rank.
 Data size = arrays `u, u_new, f` = `3·(N+2)³·8 B`.
 
@@ -8,7 +8,7 @@ Data size = arrays `u, u_new, f` = `3·(N+2)³·8 B`.
 |---|---|---|---|
 | Sequential baseline | sweep 10 … 400 | 0.03 MB … 1.56 GB | the curve shows the cache drop at N ≈ 105 (data = 30 MB = L3 of one socket). Largest run: 128 s (under the assignment's 3–4 min limit), measured peak memory 3.06 GB (< 4 GB) |
 | One node, NumPy MPI, 1–24 ranks | **200** | 198 MB = 3.3 × node L3 | out of cache, 24-rank run takes 1.5 s, existing results stay valid |
-| One node, Numba / hybrid | **400** | 1.56 GB = 26 × node L3 | at N=200 the full node needs only 0.28 s and 2.3 ms compute per iteration, which is too short to time reliably. N=400: 2.0–2.8 s, ≥ 18 ms/it (measured, below) |
+| One node, Numba / hybrid ([jobs/hybrid_n800.sub](../jobs/hybrid_n800.sub)) | **800**, `--max-iter 5`, `-M 16GB` | 12.4 GB = 206 × node L3 | chosen by Rasmus from the warm-up study ([plots/warmup.svg](../plots/warmup.svg), 24 ranks × 1 thread): at N=800, 5 iterations give 2362 Mlup/s, within 1 % of 50 iterations (2365), so start-up cost is gone. A run takes 1.1 s. The 1-rank run holds all 12.4 GB, hence `-M 16GB`. The NumPy reference in that job also runs at N=800, 5 iterations |
 | Multi node, NumPy MPI, 2–6 nodes | **600** | 5.2 GB = 2.6 GB/node (2 nodes) … 870 MB/node (6 nodes) = 44 … 15 × L3 | at 3 nodes (measured): efficiency 97 % and communication 11 %. N=400 already drops to 84 % and 31 %. At 6 nodes N=600 should still give ≈ 70 ms compute per iteration and ≈ 7 s per run. Speedup reference: 1 full node (41.8 s); a 1-core run does not fit in 4 GB |
 | Multi node, Numba / hybrid, 2–6 nodes | **700** | 8.3 GB = 4.1 GB/node (2 nodes) … 1.4 GB/node (6 nodes) | Numba computes ~6× faster, so it needs more points per node. At N=400 on 3 nodes the run takes 0.84 s and communication is 30 % (measured). N=700 on 3 nodes: 4.1 s, 35 ms compute per iteration, 19 % communication, so ≈ 2 s and ≈ 18 ms/it at 6 nodes |
 
@@ -51,6 +51,8 @@ What this shows:
   communication, so ≈ 70 ms at 6 nodes.
 
 ### Numba, one node ([jobs/size_test_numba.sub](../jobs/size_test_numba.sub))
+
+These runs led to N=400 first. The team then chose N=800 with 5 iterations (table above); they are kept as data.
 
 | N | ranks × threads | Time | Mlup/s | compute / it | comm |
 |---|---|---|---|---|---|
