@@ -3,13 +3,12 @@
 Usage (from the repo folder):  python3 plotting/plot_hybrid.py
 Reads   results/hybrid.csv       (jobs/hybrid.sub, Numba kernels, slab decomposition)
         results/mpi_decomp.csv   (NumPy kernels, mpi-slab-24x1x1, reference)
-        results/stream.csv       (STREAM Triad, 24 threads, memory-bandwidth limit)
 Writes  plots/hybrid.png
 
 Left:  strong scaling speedup T(1)/T(t) of 1 rank with t Numba threads, log-log,
        with the ideal line S = t.
 Right: Mlup/s of every ranks x threads mix that uses all 24 cores, against the
-       NumPy MPI solver on 24 ranks and the STREAM limit (Triad MB/s / 64 B per update).
+       NumPy MPI solver on 24 ranks.
 """
 import os
 
@@ -44,9 +43,6 @@ rows = mean_per_config(hybrid)
 # references
 decomp = read("results/mpi_decomp.csv")
 numpy_24 = decomp["mlups"][decomp["impl"] == "mpi-slab-24x1x1"].mean()
-stream = read("results/stream.csv")
-triad_24 = stream["best_MBs"][(stream["kernel"] == "Triad") & (stream["threads"] == CORES)].max()
-stream_mlups = triad_24 / BYTES_PER_LUP          # MB/s / B per update = Mlup/s
 
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4.8))
 
@@ -74,8 +70,6 @@ labels = [f"{r}×{t}" for r, t, _ in mixes]
 ax2.bar(labels, [m for _, _, m in mixes], color="C0", label="Hybrid MPI + Numba")
 ax2.axhline(numpy_24, color="C1", linestyle="--",
             label=f"NumPy MPI, 24 ranks ({numpy_24:.0f} Mlup/s)")
-ax2.axhline(stream_mlups, color="k", linestyle="-",
-            label=f"STREAM Triad limit ({stream_mlups:.0f} Mlup/s at {BYTES_PER_LUP} B/update)")
 ax2.set_xlabel("MPI ranks × Numba threads (24 cores, one node)")
 ax2.set_ylabel("Performance [Mlup/s]")
 ax2.set_title(f"Ranks × threads on 24 cores, N = {N}")
