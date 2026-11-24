@@ -22,14 +22,21 @@ echo "hosts: $LSB_HOSTS" | tr ' ' '\n' | sort | uniq -c
 ITER=100
 OUT="--csv results/size_test.csv --rank-csv results/size_test_ranks.csv"
 
-if [ $NP -eq 24 ]; then
-    SIZES="200 400"
-else
-    SIZES="400 600 700"
+# Other sizes: put them into the script on the way to bsub (an exported SIZES does not reach the job):
+#   sed "s/^SIZES=.*/SIZES=\"600 700\"/" jobs/size_test_numba.sub | bsub -n 24
+SIZES=""
+if [ -z "$SIZES" ]; then
+    if [ $NP -eq 24 ]; then
+        SIZES="200 400"
+    else
+        SIZES="400 600 700"
+    fi
 fi
+echo "sizes: $SIZES"
 
 for N in $SIZES; do
-    if [ $NP -eq 24 ]; then
+    # 1 rank x 1 thread only up to N=400: above that the data (5.2 GB at N=600) exceeds -M 4GB
+    if [ $NP -eq 24 ] && [ $N -le 400 ]; then
         mpirun -n 1 --bind-to core \
             python3 main_mpi_cart.py -N $N --max-iter $ITER --tol 0 --numba --threads 1 $OUT
     fi

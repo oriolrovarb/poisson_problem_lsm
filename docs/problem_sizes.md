@@ -63,22 +63,31 @@ What this shows:
 
 ### Numba, several nodes (24 ranks × 1 thread per node, cube)
 
-Efficiency = Mlup/s ÷ (nodes × 3237), where 3237 Mlup/s is one node at N=400.
+Efficiency = T(1 node, same N) / (nodes × T). 1-node values: mean of 2 runs at N=400, 1 run at N=600 and 700.
 
 | Nodes | N | Data per node | Time | Mlup/s | Efficiency | compute / it | comm |
 |---|---|---|---|---|---|---|---|
-| 1 | 400 | 1.56 GB | 1.98 s | 3237 | 100 % | 17.7 ms | 12 % |
+| 1 | 400 | 1.56 GB | 1.99 s | 3220 | 100 % | 17.9 ms | 12 % |
 | 2 | 400 | 780 MB | 1.14 s | 5615 | 87 % | 9.4 ms | 22 % |
-| 3 | 400 | 520 MB | 0.84 s | 7600 | 78 % | 6.2 ms | 30 % |
-| 2 | 600 | 2.6 GB | 3.68 s | 5873 | 91 % | 31.9 ms | 18 % |
-| 3 | 600 | 1.7 GB | 2.57 s | 8390 | 86 % | 21.6 ms | 22 % |
-| 2 | 700 | 4.1 GB | 6.32 s | 5424 | 84 % | 54.8 ms | 19 % |
-| 3 | 700 | 2.8 GB | 4.09 s | 8382 | 86 % | 35.5 ms | 19 % |
+| 3 | 400 | 520 MB | 0.84 s | 7600 | 79 % | 6.2 ms | 30 % |
+| 1 | 600 | 5.2 GB | 8.16 s | 2646 | 100 % | 76.1 ms | 15 % |
+| 2 | 600 | 2.6 GB | 3.68 s | 5873 | 111 % | 31.9 ms | 18 % |
+| 3 | 600 | 1.7 GB | 2.57 s | 8390 | 106 % | 21.6 ms | 22 % |
+| 1 | 700 | 8.3 GB | 13.68 s | 2507 | 100 % | 128.5 ms | 9 % |
+| 2 | 700 | 4.1 GB | 6.32 s | 5424 | 108 % | 54.8 ms | 19 % |
+| 3 | 700 | 2.8 GB | 4.09 s | 8382 | 111 % | 35.5 ms | 19 % |
 
 - **N=400 is too small for Numba on several nodes.** Communication grows 12 → 22 → 30 % and efficiency drops
-  to 78 % already at 3 nodes. At 6 nodes the run would last ≈ 0.4 s.
-- **N=600 and N=700 both hold ~86 % efficiency and ~20 % communication at 3 nodes.** Choose 700 so that at
-  6 nodes the run still lasts ≈ 2 s with ≈ 18 ms compute per iteration (N=600: ≈ 1.3 s, ≈ 11 ms).
+  to 79 % already at 3 nodes. At 6 nodes the run would last ≈ 0.4 s.
+- **N=600 and N=700 scale slightly superlinearly (106–111 %).** This is a smaller cache effect than with
+  N=200, because the full data never fits (≥ 1.7 GB per node). Each Jacobi sweep reuses 3 neighbouring planes
+  of `u` per rank. On one node at N=700 these take 1.96 MB per rank, which overflows a core's ~2.5 MB share of
+  L3 once `f` and `u_new` stream through too. On 2–3 nodes the planes shrink to 0.98 MB and stay in cache.
+  The same effect explains why one node gets fewer Mlup/s at large N (3220 → 2646 → 2507 for N = 400 → 600 → 700).
+  This is the most likely explanation, not a proven one. It has to be explained in the report, but no N avoids
+  it: a smaller N removes it only by making communication dominate.
+- **Choose N=700:** at 6 nodes the run still lasts ≈ 2 s with ≈ 18 ms compute per iteration
+  (N=600: ≈ 1.3 s, ≈ 11 ms).
 - 6 ranks × 4 threads per node is slower than 24 × 1 at N ≥ 600 (e.g. 3 nodes, N=700: 5.30 s vs 4.09 s).
-- The speedup reference for Numba multi-node is **one full node at N=700** (≈ 11 s). A 1-core run is not
+- The speedup reference for Numba multi-node is **one full node at N=700** (13.7 s). A 1-core run is not
   possible there: 8.3 GB of data does not fit in `-M 4GB`.
