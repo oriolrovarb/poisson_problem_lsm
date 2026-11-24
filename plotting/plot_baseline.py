@@ -1,7 +1,7 @@
 """Sequential baseline: performance (Mlup/s) vs grid size N, with cache sizes.
 
 Usage (from the repo folder):  python3 plotting/plot_baseline.py results/baseline.csv
-Plot is written to plots/<csv name>_performance.png
+Plot is written to plots/<csv name>_performance.svg
 """
 import os
 import sys
@@ -39,7 +39,7 @@ n_values = np.unique(N)
 mlups_mean = np.array([mlups[N == n].mean() for n in n_values])
 
 fig, ax = plt.subplots()
-ax.plot(n_values, mlups_mean, "o-", label="Measured")
+ax.plot(n_values, mlups_mean, "o-", color="C0", label="Measured")
 # Vertical line where u, u_new and f together no longer fit in each cache level
 for label, size, style in CACHES:
     n_cache = n_from_mb(size / 1e6)
@@ -47,9 +47,10 @@ for label, size, style in CACHES:
 ax.set_xlim(left=0)
 ax.set_xlabel("Grid size N (interior points per axis)")
 ax.set_ylabel("Performance [Mlup/s]")
-ax.set_title("Sequential baseline — Poisson, Jacobi")
+ax.set_title("Sequential baseline, NumPy\n"
+             f"N = {n_values[0]}–{n_values[-1]} · 1 node · 1 rank · no decomposition")
 ax.grid(True)
 ax.legend(loc="upper right")
 
-fig.savefig(f"plots/{name}_performance.png", bbox_inches="tight")
+fig.savefig(f"plots/{name}_performance.svg", bbox_inches="tight")
 plt.close(fig)

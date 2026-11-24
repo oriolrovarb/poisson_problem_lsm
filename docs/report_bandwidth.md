@@ -3,7 +3,7 @@
 Draft for the report. Numbers from `results/stream.csv` (job `jobs/stream.sub`, 1 run) and the solver
 runs `results/mpi_decomp.csv` / `results/mpi_placement_socket.csv` (N = 200, 100 iterations, see
 `docs/report_decomposition.md`). Intel Xeon E5-2650 v4, 2 sockets × 12 cores, `hpcintro` queue.
-Figure: `plots/bandwidth.png` (`python3 plotting/plot_bandwidth.py`).
+Figure: `plots/bandwidth.svg` (`python3 plotting/plot_bandwidth.py`).
 
 ## 1. Hardware peak
 
@@ -42,7 +42,7 @@ With the course convention of 64 B per lattice update, the solver reaches 3.0 GB
 However, the ratio STREAM / solver is almost constant: 3.6 on one core and 2.8–2.9 from 8 to 24
 ranks, for both placements. The solver curves also have the same shape as STREAM: the plateau
 between 8 and 12 ranks with core mapping, and the gain from socket mapping, appear in both
-(`plots/bandwidth.png`). A constant factor with the same shape is what one expects if the solver
+(`plots/bandwidth.svg`). A constant factor with the same shape is what one expects if the solver
 is memory-bound and moves about 3× more bytes per update than the 64 B convention assumes.
 
 The NumPy implementation explains this factor. The update

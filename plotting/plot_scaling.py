@@ -1,7 +1,8 @@
 """Strong scaling plots: time, speedup and parallel efficiency vs number of ranks.
 
 Usage (from the repo folder):  python3 plotting/plot_scaling.py results/mpi_strong.csv
-Plots are written to plots/<csv name>_*.png
+Plots are written to plots/<csv name>_*.svg
+The titles assume the runs of jobs/mpi_strong.sub: one node, slab decomposition.
 """
 import os
 import sys
@@ -32,42 +33,43 @@ t0 = t_mean[0]
 speedup = p0 * t0 / t_mean
 efficiency = speedup / p_values
 
-title_suffix = f"Poisson, slab decomposition, N = {N}"
+# line 2 of every title: the setup that is fixed for the whole figure (docs/plotting_rules.md)
+setup = f"N = {N} · 1 node · slab P×1×1"
 
 # 1. Total time
 plt.figure()
-plt.plot(p_values, t_mean, "o-")
+plt.plot(p_values, t_mean, "o-", color="C0")
 plt.xlabel("Number of MPI processes")
 plt.ylabel("Time of the iteration loop [s]")
-plt.title(f"Time — {title_suffix}")
+plt.title(f"Strong scaling, NumPy MPI: time\n{setup}")
 plt.xticks(p_values)
 plt.grid(True)
-plt.savefig(f"plots/{name}_timing.png", bbox_inches="tight")
+plt.savefig(f"plots/{name}_timing.svg", bbox_inches="tight")
 plt.close()
 
 # 2. Speedup with ideal line
 plt.figure()
-plt.plot(p_values, speedup, "o-", label="Measured")
+plt.plot(p_values, speedup, "o-", color="C0", label="Measured")
 plt.plot(p_values, p_values, "k--", label="Ideal (S = p)")
 plt.xlabel("Number of MPI processes")
 plt.ylabel("Speedup")
-plt.title(f"Speedup — {title_suffix}")
+plt.title(f"Strong scaling, NumPy MPI: speedup\n{setup}")
 plt.xticks(p_values)
 plt.legend()
 plt.grid(True)
-plt.savefig(f"plots/{name}_speedup.png", bbox_inches="tight")
+plt.savefig(f"plots/{name}_speedup.svg", bbox_inches="tight")
 plt.close()
 
 # 3. Parallel efficiency with ideal line at 1
 plt.figure()
-plt.plot(p_values, efficiency, "o-", label="Measured")
+plt.plot(p_values, efficiency, "o-", color="C0", label="Measured")
 plt.axhline(1.0, color="k", linestyle="--", label="Ideal (E = 1)")
 plt.xlabel("Number of MPI processes")
 plt.ylabel("Parallel efficiency  S(p) / p")
-plt.title(f"Parallel efficiency — {title_suffix}")
+plt.title(f"Strong scaling, NumPy MPI: parallel efficiency\n{setup}")
 plt.xticks(p_values)
 plt.ylim(0, max(1.1, 1.05 * efficiency.max()))   # superlinear (E > 1) stays visible
 plt.legend()
 plt.grid(True)
-plt.savefig(f"plots/{name}_efficiency.png", bbox_inches="tight")
+plt.savefig(f"plots/{name}_efficiency.svg", bbox_inches="tight")
 plt.close()
