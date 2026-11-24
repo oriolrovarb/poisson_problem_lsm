@@ -1,0 +1,35 @@
+#BSUB -J poisson_warmup
+#BSUB -q hpcintro
+#BSUB -W 1:00
+#BSUB -M 4GB
+#BSUB -n 24
+#BSUB -R "span[hosts=1]"
+#BSUB -o jobs/output/poisson_warmup_%J.out
+#BSUB -e jobs/output/poisson_warmup_%J.err
+
+# Submit from the repo folder:  bsub < jobs/warmup.sub
+# How many iterations until Mlup/s stops rising ("the car reaches top speed")?
+# Hybrid Numba, 24 ranks x 1 thread (slab), for several N and iteration counts.
+# Memory (3 arrays of (N+2)^3 doubles): N=200 0.2 GB, 400 1.6 GB, 600 5.2 GB, 800 12.4 GB
+# in total, i.e. about 8 MB, 65 MB, 220 MB and 520 MB per rank.
+
+module load matplotlib/3.10.3-numpy-2.3.1-python-3.12.11 >& /dev/null
+module load mpi4py/4.0.3-python-3.12.11-openmpi-5.0.8 >& /dev/null
+
+lscpu | grep -E "Model name|Socket|cache"
+
+NS="200 400 600 800"
+ITERS="1 2 5 10 20 50"
+REPS=3          # repeat every configuration, to see the run-to-run spread
+R=24
+T=1
+
+for N in $NS; do
+    for ITER in $ITERS; do
+        for REP in $(seq $REPS); do
+            mpirun -n $R --map-by slot:PE=$T --bind-to core \
+                python3 main_mpi_cart.py -N $N --max-iter $ITER --tol 0 \
+                --dims $R 1 1 --numba --threads $T --csv results/warmup.csv
+        done
+    done
+done
