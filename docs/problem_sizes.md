@@ -12,6 +12,9 @@ Data size = arrays `u, u_new, f` = `3·(N+2)³·8 B`.
 | Multi node, NumPy MPI, 2–6 nodes | **600** | 5.2 GB = 2.6 GB/node (2 nodes) … 870 MB/node (6 nodes) = 44 … 15 × L3 | at 3 nodes (measured): efficiency 97 % and communication 11 %. N=400 already drops to 84 % and 31 %. At 6 nodes N=600 should still give ≈ 70 ms compute per iteration and ≈ 7 s per run. Speedup reference: 1 full node (41.8 s); a 1-core run does not fit in 4 GB |
 | Multi node, Numba / hybrid, 2–6 nodes | **700** | 8.3 GB = 4.1 GB/node (2 nodes) … 1.4 GB/node (6 nodes) | Numba computes ~6× faster, so it needs more points per node. At N=400 on 3 nodes the run takes 0.84 s and communication is 30 % (measured). N=700 on 3 nodes: 4.1 s, 35 ms compute per iteration, 19 % communication, so ≈ 2 s and ≈ 18 ms/it at 6 nodes |
 
+Figure: [plots/problem_size.svg](../plots/problem_size.svg) (`python3 plotting/plot_problem_size.py`),
+efficiency and communication share vs nodes for every tested N.
+
 **Decomposition on several nodes: use cube (`--dims` omitted) or pencil, not slab.** This is not about N.
 A slab cuts only one axis, so each rank gets N/P planes. With 144 ranks and N=600 that is 4.2 planes,
 and the 2 halo planes each rank exchanges are 48 % of what it computes (cube: 5 %). Measured at 3 nodes,
