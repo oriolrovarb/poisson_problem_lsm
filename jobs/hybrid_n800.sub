@@ -1,0 +1,57 @@
+#BSUB -J poisson_hybrid_n800
+#BSUB -q hpcintro
+#BSUB -W 1:00
+#BSUB -M 16GB
+#BSUB -n 24
+#BSUB -R "span[hosts=1]"
+#BSUB -o jobs/output/poisson_hybrid_n800_%J.out
+#BSUB -e jobs/output/poisson_hybrid_n800_%J.err
+
+# Submit from the repo folder:  bsub < jobs/hybrid_n800.sub
+# Same experiment as jobs/hybrid.sub (ranks x threads, slab), but at a problem size
+# that measures memory speed instead of start-up cost: N=800, 5 iterations
+# (see plots/warmup.svg: from N=800 on, 5 iterations are within 1 % of top speed).
+# Data: 3 arrays of 802^3 doubles = 12.4 GB in total. With 1 rank that is one process
+# of 12.4 GB, hence -M 16GB instead of 4GB.
+# --report-bindings prints the cores each rank is bound to (in the .err file).
+# A NumPy run on 24 ranks at the same N is the reference for the hybrid runs.
+
+module load matplotlib/3.10.3-numpy-2.3.1-python-3.12.11 >& /dev/null
+module load mpi4py/4.0.3-python-3.12.11-openmpi-5.0.8 >& /dev/null
+
+lscpu | grep -E "Model name|Socket|NUMA|cache"
+
+N=800
+ITER=5
+REPS=3          # repeat every configuration, to see the run-to-run spread
+CSV=results/hybrid_n800.csv
+
+# "ranks x threads": first 1 rank with more threads, then mixes that use all 24 cores
+RUNS="1x1 1x2 1x4 1x8 1x12 1x16 1x24 24x1 12x2 8x3 6x4 4x6 2x12"
+
+for RUN in $RUNS; do
+    R=${RUN%x*}
+    T=${RUN#*x}
+    # Each rank gets T cores, so Numba can start T threads. A node has 2 sockets
+    # of 12 cores, and OpenMPI refuses to bind one rank to cores on both sockets,
+    # so a rank with more than 12 threads is not bound (it may use the whole node).
+    if [ $T -gt 12 ]; then
+        BIND="--bind-to none"
+    else
+        BIND="--map-by slot:PE=$T --bind-to core"
+    fi
+    for REP in $(seq $REPS); do
+        echo "=== $RUN rep $REP: mpirun -n $R $BIND" >&2
+        mpirun -n $R $BIND --report-bindings \
+            python3 main_mpi_cart.py -N $N --max-iter $ITER --tol 0 \
+            --dims $R 1 1 --numba --threads $T --csv $CSV
+    done
+done
+
+# reference: NumPy kernels, 24 ranks x 1, same N, iterations and decomposition
+for REP in $(seq $REPS); do
+    echo "=== NumPy 24x1 rep $REP" >&2
+    mpirun -n 24 --map-by slot:PE=1 --bind-to core --report-bindings \
+        python3 main_mpi_cart.py -N $N --max-iter $ITER --tol 0 \
+        --dims 24 1 1 --csv $CSV
+done

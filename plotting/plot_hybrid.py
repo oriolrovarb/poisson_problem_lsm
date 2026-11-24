@@ -1,16 +1,20 @@
 """Hybrid MPI + Numba: thread scaling and ranks x threads mixes on one node.
 
-Usage (from the repo folder):  python3 plotting/plot_hybrid.py
-Reads   results/hybrid.csv       (jobs/hybrid.sub, Numba kernels, slab decomposition)
-        results/mpi_nonblocking_improved.csv   (NumPy kernels, non-blocking MPI, 24 ranks, reference)
-Writes  plots/hybrid.svg
+Usage (from the repo folder):
+    python3 plotting/plot_hybrid.py                            # N=200, jobs/hybrid.sub
+    python3 plotting/plot_hybrid.py results/hybrid_n800.csv    # N=800, jobs/hybrid_n800.sub
+Reads   the given CSV (default results/hybrid.csv): hybrid-* rows are the Numba runs.
+        NumPy reference on 24 ranks: the mpi-* rows of the same CSV if the job made
+        them, else results/mpi_nonblocking_improved.csv at the same N.
+Writes  plots/<csv name>.svg
 
 Left:  strong scaling speedup T(1)/T(t) of 1 rank with t Numba threads, log-log,
        with the ideal line S = t.
 Right: Mlup/s of every ranks x threads mix that uses all 24 cores, against the
-       fastest NumPy MPI solver on 24 ranks (non-blocking, mpi_nonblocking_improved.py).
+       NumPy MPI solver on 24 ranks.
 """
 import os
+import sys
 
 import numpy as np
 import matplotlib
@@ -36,13 +40,24 @@ def mean_per_config(d):
     return rows
 
 
-hybrid = read("results/hybrid.csv")
+csv_path = sys.argv[1] if len(sys.argv) > 1 else "results/hybrid.csv"
+name = os.path.splitext(os.path.basename(csv_path))[0]
+data = read(csv_path)
+is_hybrid = np.char.startswith(data["impl"].astype(str), "hybrid-")
+hybrid = data[is_hybrid]
 N = int(hybrid["N"][0])
+iters = int(hybrid["iterations"][0])
 rows = mean_per_config(hybrid)
 
-# references
-nonblock = read("results/mpi_nonblocking_improved.csv")
-numpy_24 = nonblock["mlups"][(nonblock["N"] == N) & (nonblock["ranks"] == CORES)].mean()
+# NumPy reference on 24 ranks: from the same job if it has one, else Oriol's non-blocking run
+own = data[~is_hybrid & (data["ranks"] == CORES)]
+if len(own):
+    numpy_24 = own["mlups"].mean()
+    numpy_label = f"NumPy MPI, 24 ranks, slab 24×1×1, same job ({numpy_24:.0f} Mlup/s)"
+else:
+    nonblock = read("results/mpi_nonblocking_improved.csv")
+    numpy_24 = nonblock["mlups"][(nonblock["N"] == N) & (nonblock["ranks"] == CORES)].mean()
+    numpy_label = f"NumPy MPI non-blocking, 24 ranks, slab 24×1×1 ({numpy_24:.0f} Mlup/s)"
 
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4.8))
 
@@ -68,8 +83,7 @@ mixes = [(r, t, m) for r, t, _, m in rows if r * t == CORES]
 mixes.sort(key=lambda x: -x[0])                  # 24x1 first, 1x24 last
 labels = [f"{r}×{t}" for r, t, _ in mixes]
 ax2.bar(labels, [m for _, _, m in mixes], color="C0", label="Hybrid MPI + Numba")
-ax2.axhline(numpy_24, color="C1", linestyle="--",
-            label=f"NumPy MPI non-blocking, 24 ranks, slab 24×1×1 ({numpy_24:.0f} Mlup/s)")
+ax2.axhline(numpy_24, color="C1", linestyle="--", label=numpy_label)
 ax2.set_xlabel("MPI ranks × Numba threads (24 cores, one node)")
 ax2.set_ylabel("Performance [Mlup/s]")
 ax2.set_title("Ranks × threads = 24 cores")
@@ -77,9 +91,9 @@ ax2.grid(True, axis="y", alpha=0.4)
 ax2.legend(loc="upper center", bbox_to_anchor=(0.5, -0.15), fontsize="small")
 
 fig.suptitle("Hybrid MPI + Numba\n"
-             f"N = {N} · 1 node · ranks × threads/rank · slab R×1×1")
+             f"N = {N} · {iters} iterations · 1 node · ranks × threads/rank · slab R×1×1")
 fig.tight_layout()
 os.makedirs("plots", exist_ok=True)
-fig.savefig("plots/hybrid.svg", bbox_inches="tight")
+fig.savefig(f"plots/{name}.svg", bbox_inches="tight")
 plt.close(fig)
-print("wrote plots/hybrid.svg")
+print(f"wrote plots/{name}.svg")
