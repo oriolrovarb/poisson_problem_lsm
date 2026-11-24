@@ -1,0 +1,76 @@
+[hybrid-slab-1x1x1] N=200 ranks=1 threads=1 | iterations=100 | time=2.426 s | 329.73 Mlup/s (21.10 GB/s) | final diff=nan | max error=9.52e-01
+[hybrid-cube-4x3x2] N=200 ranks=24 threads=1 | iterations=100 | time=0.275 s | 2906.71 Mlup/s (186.03 GB/s) | final diff=nan | max error=9.52e-01
+[hybrid-slab-6x1x1] N=200 ranks=6 threads=4 | iterations=100 | time=0.300 s | 2665.70 Mlup/s (170.60 GB/s) | final diff=nan | max error=9.52e-01
+[hybrid-slab-1x1x1] N=400 ranks=1 threads=1 | iterations=100 | time=19.067 s | 335.65 Mlup/s (21.48 GB/s) | final diff=nan | max error=9.88e-01
+[hybrid-cube-4x3x2] N=400 ranks=24 threads=1 | iterations=100 | time=1.977 s | 3236.91 Mlup/s (207.16 GB/s) | final diff=nan | max error=9.88e-01
+[hybrid-slab-6x1x1] N=400 ranks=6 threads=4 | iterations=100 | time=2.765 s | 2314.41 Mlup/s (148.12 GB/s) | final diff=nan | max error=9.88e-01
+
+------------------------------------------------------------
+Sender: LSF System <lsfadmin@hpc.dtu.dk>
+Subject: Job 30349896: <poisson_size_numba> in cluster <dcc> Done
+
+Job <poisson_size_numba> was submitted from host <hpclogin1> by user <s262240> in cluster <dcc> at Tue Nov 24 10:16:37 2026
+Job was executed on host(s) <24*n-62-21-76>, in queue <hpcintro>, as user <s262240> in cluster <dcc> at Tue Nov 24 10:16:39 2026
+</zhome/55/9/232051> was used as the home directory.
+</zhome/55/9/232051/02616-student/poisson_problem_lsm> was used as the working directory.
+Started at Tue Nov 24 10:16:39 2026
+Terminated at Tue Nov 24 10:17:35 2026
+Results reported at Tue Nov 24 10:17:35 2026
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+#BSUB -J poisson_size_numba
+#BSUB -q hpcintro
+#BSUB -W 0:20
+#BSUB -M 4GB
+#BSUB -n 24
+#BSUB -R "span[hosts=1]"
+#BSUB -o jobs/output/poisson_size_numba_%J.out
+#BSUB -e jobs/output/poisson_size_numba_%J.err
+
+# Numba part of the size test: is N=400 long enough to time on one node?
+# Submit from the repo folder:  bsub < jobs/size_test_numba.sub
+# Needs numba for the Python 3.12 module:  pip install --user numba  (with the modules below loaded)
+
+module load matplotlib/3.10.3-numpy-2.3.1-python-3.12.11 >& /dev/null
+module load mpi4py/4.0.3-python-3.12.11-openmpi-5.0.8 >& /dev/null
+
+ITER=100
+OUT="--csv results/size_test.csv --rank-csv results/size_test_ranks.csv"
+
+for N in 200 400; do
+    mpirun -n 1 --bind-to core \
+        python3 main_mpi_cart.py -N $N --max-iter $ITER --tol 0 --numba --threads 1 $OUT
+    mpirun -n 24 --map-by ppr:24:node --bind-to core \
+        python3 main_mpi_cart.py -N $N --max-iter $ITER --tol 0 --numba --threads 1 $OUT
+    mpirun -n 6 --map-by slot:PE=4 --bind-to core \
+        python3 main_mpi_cart.py -N $N --max-iter $ITER --tol 0 --dims 6 1 1 --numba --threads 4 $OUT
+done
+
+------------------------------------------------------------
+
+Successfully completed.
+
+Resource usage summary:
+
+    CPU time :                                   381.28 sec.
+    Max Memory :                                 1951 MB
+    Average Memory :                             1951.00 MB
+    Total Requested Memory :                     98304.00 MB
+    Delta Memory :                               96353.00 MB
+    Max Swap :                                   -
+    Max Processes :                              28
+    Max Threads :                                31
+    Run time :                                   56 sec.
+    Turnaround time :                            58 sec.
+
+The output (if any) is above this job summary.
+
+
+
+PS:
+
+Read file <jobs/output/poisson_size_numba_30349896.err> for stderr output of this job.
+

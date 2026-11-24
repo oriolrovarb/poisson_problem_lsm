@@ -1,7 +1,8 @@
 """Load balance: compute, communication and idle time per rank, one plot per (N, ranks).
 
 Usage (from the repo folder):  python3 plotting/plot_load_balance.py results/mpi_ranks.csv
-Plots are written to plots/<csv name>_load_balance_N<N>_p<p>.png
+Plots are written to plots/<csv name>_load_balance_N<N>_p<p>.svg
+The title assumes the runs of jobs/mpi_strong.sub: one node, slab decomposition.
 """
 import os
 import sys
@@ -36,13 +37,14 @@ for N, p in sorted(set(zip(sizes, nprocs))):
     # Imbalance shows up as more communication time on the faster ranks.
 
     plt.figure()
-    plt.bar(r_ids, t_comp, label="Computing")
-    plt.bar(r_ids, t_comm, bottom=t_comp, label="Communication (incl. waiting)")
+    plt.bar(r_ids, t_comp, color="C0", label="Computing")
+    plt.bar(r_ids, t_comm, bottom=t_comp, color="C1", label="Communication (incl. waiting)")
     plt.xlabel("Rank")
     plt.ylabel("Time [s]")
     comm_frac = t_comm.sum() / (t_comp + t_comm).sum()
-    plt.title(f"Load balance, {p} processes, N = {N} — {comm_frac:.0%} of time in communication")
+    plt.title(f"Load balance, NumPy MPI: {comm_frac:.0%} of time in communication\n"
+              f"N = {N} · 1 node · {p} ranks · slab {p}×1×1")
     plt.xticks(r_ids)
     plt.legend(loc="upper center", bbox_to_anchor=(0.5, -0.12), ncol=2)
-    plt.savefig(f"plots/{name}_load_balance_N{N}_p{p}.png", bbox_inches="tight")
+    plt.savefig(f"plots/{name}_load_balance_N{N}_p{p}.svg", bbox_inches="tight")
     plt.close()

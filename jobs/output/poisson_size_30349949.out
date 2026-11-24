@@ -1,0 +1,104 @@
+ranks: 72
+      1 hosts:
+     24 n-62-21-47
+     24 n-62-21-48
+     24 n-62-21-77
+[mpi-cube-6x4x3] N=200 ranks=72 threads=1 | iterations=100 | time=0.493 s | 1621.34 Mlup/s (103.77 GB/s) | final diff=nan | max error=9.52e-01
+[mpi-slab-72x1x1] N=200 ranks=72 threads=1 | iterations=100 | time=0.349 s | 2295.41 Mlup/s (146.91 GB/s) | final diff=nan | max error=9.52e-01
+[mpi-cube-6x4x3] N=400 ranks=72 threads=1 | iterations=100 | time=4.682 s | 1366.80 Mlup/s (87.48 GB/s) | final diff=nan | max error=9.88e-01
+[mpi-slab-72x1x1] N=400 ranks=72 threads=1 | iterations=100 | time=6.828 s | 937.37 Mlup/s (59.99 GB/s) | final diff=nan | max error=9.88e-01
+[mpi-cube-6x4x3] N=600 ranks=72 threads=1 | iterations=100 | time=14.410 s | 1498.92 Mlup/s (95.93 GB/s) | final diff=nan | max error=9.95e-01
+[mpi-slab-72x1x1] N=600 ranks=72 threads=1 | iterations=100 | time=14.808 s | 1458.63 Mlup/s (93.35 GB/s) | final diff=nan | max error=9.95e-01
+
+------------------------------------------------------------
+Sender: LSF System <lsfadmin@hpc.dtu.dk>
+Subject: Job 30349949: <poisson_size> in cluster <dcc> Done
+
+Job <poisson_size> was submitted from host <hpclogin1> by user <s262240> in cluster <dcc> at Tue Nov 24 10:22:04 2026
+Job was executed on host(s) <24*n-62-21-77>, in queue <hpcintro>, as user <s262240> in cluster <dcc> at Tue Nov 24 10:24:12 2026
+                            <24*n-62-21-47>
+                            <24*n-62-21-48>
+</zhome/55/9/232051> was used as the home directory.
+</zhome/55/9/232051/02616-student/poisson_problem_lsm> was used as the working directory.
+Started at Tue Nov 24 10:24:12 2026
+Terminated at Tue Nov 24 10:25:07 2026
+Results reported at Tue Nov 24 10:25:07 2026
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+#BSUB -J poisson_size
+#BSUB -q hpcintro
+#BSUB -W 0:30
+#BSUB -M 4GB
+#BSUB -R "span[ptile=24]"
+#BSUB -o jobs/output/poisson_size_%J.out
+#BSUB -e jobs/output/poisson_size_%J.err
+
+# Test which N gives each node enough work. The node count comes from -n, so submit
+# one job per node count from the repo folder:
+#   bsub -n 24  < jobs/size_test.sub     # 1 node (also runs the Numba and memory checks)
+#   bsub -n 48  < jobs/size_test.sub     # 2 nodes
+#   bsub -n 96  < jobs/size_test.sub     # 4 nodes
+#   bsub -n 144 < jobs/size_test.sub     # 6 nodes (all of hpcintro)
+# Every run writes the per-rank compute/comm split to results/size_test_ranks.csv.
+
+module load matplotlib/3.10.3-numpy-2.3.1-python-3.12.11 >& /dev/null
+module load mpi4py/4.0.3-python-3.12.11-openmpi-5.0.8 >& /dev/null
+
+NP=$LSB_DJOB_NUMPROC
+echo "ranks: $NP"
+echo "hosts: $LSB_HOSTS" | tr ' ' '\n' | sort | uniq -c
+
+ITER=100
+OUT="--csv results/size_test.csv --rank-csv results/size_test_ranks.csv"
+
+for N in 200 400 600; do
+    # cube = balanced 3D grid chosen by MPI.Compute_dims, slab = NP x 1 x 1
+    for DIMS in "" "--dims $NP 1 1"; do
+        mpirun -n $NP --map-by ppr:24:node --bind-to core \
+            python3 main_mpi_cart.py -N $N --max-iter $ITER --tol 0 $DIMS $OUT
+    done
+done
+
+if [ $NP -eq 24 ]; then
+    # Numba on one node: is N=400 long enough to time?
+    for N in 200 400; do
+        mpirun -n 1 --bind-to core \
+            python3 main_mpi_cart.py -N $N --max-iter $ITER --tol 0 --numba --threads 1 $OUT
+        mpirun -n 24 --map-by ppr:24:node --bind-to core \
+            python3 main_mpi_cart.py -N $N --max-iter $ITER --tol 0 --numba --threads 1 $OUT
+        mpirun -n 6 --map-by slot:PE=4 --bind-to core \
+            python3 main_mpi_cart.py -N $N --max-iter $ITER --tol 0 --dims 6 1 1 --numba --threads 4 $OUT
+    done
+    # memory of the largest sequential reference (N=400, 1 rank, NumPy) against -M 4GB
+    /usr/bin/time -v python3 main_sequential.py -N 400 --max-iter 10 --tol 0 2>&1 \
+        | grep -E "Maximum resident|Elapsed"
+fi
+
+------------------------------------------------------------
+
+Successfully completed.
+
+Resource usage summary:
+
+    CPU time :                                   3479.00 sec.
+    Max Memory :                                 7389 MB
+    Average Memory :                             6220.33 MB
+    Total Requested Memory :                     294912.00 MB
+    Delta Memory :                               287523.00 MB
+    Max Swap :                                   -
+    Max Processes :                              28
+    Max Threads :                                79
+    Run time :                                   55 sec.
+    Turnaround time :                            183 sec.
+
+The output (if any) is above this job summary.
+
+
+
+PS:
+
+Read file <jobs/output/poisson_size_30349949.err> for stderr output of this job.
+

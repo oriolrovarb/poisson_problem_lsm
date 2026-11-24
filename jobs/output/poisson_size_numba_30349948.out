@@ -1,0 +1,97 @@
+cores: 72
+      1 hosts:
+     24 n-62-21-47
+     24 n-62-21-48
+     24 n-62-21-77
+[hybrid-cube-6x4x3] N=400 ranks=72 threads=1 | iterations=100 | time=0.842 s | 7599.63 Mlup/s (486.38 GB/s) | final diff=nan | max error=9.88e-01
+[hybrid-cube-3x3x2] N=400 ranks=18 threads=4 | iterations=100 | time=0.803 s | 7972.33 Mlup/s (510.23 GB/s) | final diff=nan | max error=9.88e-01
+[hybrid-cube-6x4x3] N=600 ranks=72 threads=1 | iterations=100 | time=2.575 s | 8389.86 Mlup/s (536.95 GB/s) | final diff=nan | max error=9.95e-01
+[hybrid-cube-3x3x2] N=600 ranks=18 threads=4 | iterations=100 | time=3.089 s | 6993.25 Mlup/s (447.57 GB/s) | final diff=nan | max error=9.95e-01
+[hybrid-cube-6x4x3] N=700 ranks=72 threads=1 | iterations=100 | time=4.092 s | 8381.84 Mlup/s (536.44 GB/s) | final diff=nan | max error=9.96e-01
+[hybrid-cube-3x3x2] N=700 ranks=18 threads=4 | iterations=100 | time=5.300 s | 6471.41 Mlup/s (414.17 GB/s) | final diff=nan | max error=9.96e-01
+
+------------------------------------------------------------
+Sender: LSF System <lsfadmin@hpc.dtu.dk>
+Subject: Job 30349948: <poisson_size_numba> in cluster <dcc> Done
+
+Job <poisson_size_numba> was submitted from host <hpclogin1> by user <s262240> in cluster <dcc> at Tue Nov 24 10:22:04 2026
+Job was executed on host(s) <24*n-62-21-77>, in queue <hpcintro>, as user <s262240> in cluster <dcc> at Tue Nov 24 10:23:08 2026
+                            <24*n-62-21-48>
+                            <24*n-62-21-47>
+</zhome/55/9/232051> was used as the home directory.
+</zhome/55/9/232051/02616-student/poisson_problem_lsm> was used as the working directory.
+Started at Tue Nov 24 10:23:08 2026
+Terminated at Tue Nov 24 10:23:58 2026
+Results reported at Tue Nov 24 10:23:58 2026
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+#BSUB -J poisson_size_numba
+#BSUB -q hpcintro
+#BSUB -W 0:20
+#BSUB -M 4GB
+#BSUB -R "span[ptile=24]"
+#BSUB -o jobs/output/poisson_size_numba_%J.out
+#BSUB -e jobs/output/poisson_size_numba_%J.err
+
+# Numba part of the size test. The node count comes from -n, submit from the repo folder:
+#   bsub -n 24 < jobs/size_test_numba.sub     # 1 node: is N=400 long enough to time?
+#   bsub -n 48 < jobs/size_test_numba.sub     # 2 nodes: which N keeps each node busy?
+#   bsub -n 72 < jobs/size_test_numba.sub     # 3 nodes
+# Needs numba for the Python 3.12 module:  pip install --user numba  (with the modules below loaded)
+
+module load matplotlib/3.10.3-numpy-2.3.1-python-3.12.11 >& /dev/null
+module load mpi4py/4.0.3-python-3.12.11-openmpi-5.0.8 >& /dev/null
+
+NP=$LSB_DJOB_NUMPROC
+echo "cores: $NP"
+echo "hosts: $LSB_HOSTS" | tr ' ' '\n' | sort | uniq -c
+
+ITER=100
+OUT="--csv results/size_test.csv --rank-csv results/size_test_ranks.csv"
+
+if [ $NP -eq 24 ]; then
+    SIZES="200 400"
+else
+    SIZES="400 600 700"
+fi
+
+for N in $SIZES; do
+    if [ $NP -eq 24 ]; then
+        mpirun -n 1 --bind-to core \
+            python3 main_mpi_cart.py -N $N --max-iter $ITER --tol 0 --numba --threads 1 $OUT
+    fi
+    # 24 ranks x 1 thread per node (cube), and 6 ranks x 4 threads per node (cube)
+    mpirun -n $NP --map-by ppr:24:node --bind-to core \
+        python3 main_mpi_cart.py -N $N --max-iter $ITER --tol 0 --numba --threads 1 $OUT
+    mpirun -n $((NP / 4)) --map-by ppr:6:node:PE=4 --bind-to core \
+        python3 main_mpi_cart.py -N $N --max-iter $ITER --tol 0 --numba --threads 4 $OUT
+done
+
+------------------------------------------------------------
+
+Successfully completed.
+
+Resource usage summary:
+
+    CPU time :                                   2262.00 sec.
+    Max Memory :                                 3083 MB
+    Average Memory :                             2687.00 MB
+    Total Requested Memory :                     294912.00 MB
+    Delta Memory :                               291829.00 MB
+    Max Swap :                                   -
+    Max Processes :                              28
+    Max Threads :                                43
+    Run time :                                   50 sec.
+    Turnaround time :                            114 sec.
+
+The output (if any) is above this job summary.
+
+
+
+PS:
+
+Read file <jobs/output/poisson_size_numba_30349948.err> for stderr output of this job.
+

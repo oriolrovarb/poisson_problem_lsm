@@ -4,7 +4,7 @@ Usage (from the repo folder):  python3 plotting/plot_bandwidth.py
 Reads   results/stream.csv                  (jobs/stream.sub)
         results/mpi_decomp.csv              (solver, --map-by core,   jobs/mpi_decomp.sub)
         results/mpi_placement_socket.csv    (solver, --map-by socket, jobs/mpi_placement.sub)
-Writes  plots/bandwidth.png
+Writes  plots/bandwidth.svg
 Solver GB/s use the course convention of 64 bytes per lattice update (the `gbs` column);
 mean over all layouts (slab/pencil/cube) and repetitions at each number of ranks.
 """
@@ -51,10 +51,11 @@ ax.set_xlim(0, 25)
 ax.set_ylim(0, 165)
 ax.set_xlabel("Threads (STREAM) / MPI ranks (solver), one node")
 ax.set_ylabel("Memory bandwidth [GB/s]")
-ax.set_title("Memory bandwidth — Xeon E5-2650 v4, 2 sockets × 12 cores")
+ax.set_title("Memory bandwidth: STREAM Triad vs NumPy MPI solver\n"
+             "solver N = 200 · 1 node · 1–24 ranks · mean of slab/pencil/cube")
 ax.grid(True)
 ax.legend(loc="upper left", fontsize="small")
 
 os.makedirs("plots", exist_ok=True)
-fig.savefig("plots/bandwidth.png", bbox_inches="tight")
+fig.savefig("plots/bandwidth.svg", bbox_inches="tight")
 plt.close(fig)

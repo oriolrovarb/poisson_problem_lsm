@@ -1,0 +1,154 @@
+Traceback (most recent call last):
+  File "/zhome/55/9/232051/02616-student/poisson_problem_lsm/main_mpi_cart.py", line 5, in <module>
+    from poisson.jacobi_numba import warmup
+  File "/zhome/55/9/232051/02616-student/poisson_problem_lsm/poisson/jacobi_numba.py", line 1, in <module>
+    from numba import njit, prange
+ModuleNotFoundError: No module named 'numba'
+Traceback (most recent call last):
+  File "/zhome/55/9/232051/02616-student/poisson_problem_lsm/main_mpi_cart.py", line 5, in <module>
+    from poisson.jacobi_numba import warmup
+  File "/zhome/55/9/232051/02616-student/poisson_problem_lsm/poisson/jacobi_numba.py", line 1, in <module>
+    from numba import njit, prange
+ModuleNotFoundError: No module named 'numba'
+Traceback (most recent call last):
+  File "/zhome/55/9/232051/02616-student/poisson_problem_lsm/main_mpi_cart.py", line 5, in <module>
+    from poisson.jacobi_numba import warmup
+  File "/zhome/55/9/232051/02616-student/poisson_problem_lsm/poisson/jacobi_numba.py", line 1, in <module>
+    from numba import njit, prange
+ModuleNotFoundError: No module named 'numba'
+Traceback (most recent call last):
+  File "/zhome/55/9/232051/02616-student/poisson_problem_lsm/main_mpi_cart.py", line 5, in <module>
+    from poisson.jacobi_numba import warmup
+  File "/zhome/55/9/232051/02616-student/poisson_problem_lsm/poisson/jacobi_numba.py", line 1, in <module>
+    from numba import njit, prange
+ModuleNotFoundError: No module named 'numba'
+Traceback (most recent call last):
+  File "/zhome/55/9/232051/02616-student/poisson_problem_lsm/main_mpi_cart.py", line 5, in <module>
+Traceback (most recent call last):
+  File "/zhome/55/9/232051/02616-student/poisson_problem_lsm/main_mpi_cart.py", line 5, in <module>
+    from poisson.jacobi_numba import warmup
+  File "/zhome/55/9/232051/02616-student/poisson_problem_lsm/poisson/jacobi_numba.py", line 1, in <module>
+Traceback (most recent call last):
+  File "/zhome/55/9/232051/02616-student/poisson_problem_lsm/main_mpi_cart.py", line 5, in <module>
+    from poisson.jacobi_numba import warmup
+  File "/zhome/55/9/232051/02616-student/poisson_problem_lsm/poisson/jacobi_numba.py", line 1, in <module>
+    from numba import njit, prange
+ModuleNotFoundError: No module named 'numba'
+    from numba import njit, prange
+ModuleNotFoundError: No module named 'numba'
+    from poisson.jacobi_numba import warmup
+  File "/zhome/55/9/232051/02616-student/poisson_problem_lsm/poisson/jacobi_numba.py", line 1, in <module>
+    from numba import njit, prange
+ModuleNotFoundError: No module named 'numba'
+Traceback (most recent call last):
+  File "/zhome/55/9/232051/02616-student/poisson_problem_lsm/main_mpi_cart.py", line 5, in <module>
+    from poisson.jacobi_numba import warmup
+  File "/zhome/55/9/232051/02616-student/poisson_problem_lsm/poisson/jacobi_numba.py", line 1, in <module>
+    from numba import njit, prange
+ModuleNotFoundError: No module named 'numba'
+--------------------------------------------------------------------------
+prterun detected that one or more processes exited with non-zero status,
+thus causing the job to be terminated. The first process to do so was:
+
+   Process name: [prterun-n-62-21-76-500800@1,0]
+   Exit code:    1
+--------------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/zhome/55/9/232051/02616-student/poisson_problem_lsm/main_mpi_cart.py", line 5, in <module>
+Traceback (most recent call last):
+  File "/zhome/55/9/232051/02616-student/poisson_problem_lsm/main_mpi_cart.py", line 5, in <module>
+    from poisson.jacobi_numba import warmup
+  File "/zhome/55/9/232051/02616-student/poisson_problem_lsm/poisson/jacobi_numba.py", line 1, in <module>
+    from poisson.jacobi_numba import warmup
+    from numba import njit, prange
+  File "/zhome/55/9/232051/02616-student/poisson_problem_lsm/poisson/jacobi_numba.py", line 1, in <module>
+ModuleNotFoundError: No module named 'numba'
+    from numba import njit, prange
+ModuleNotFoundError: No module named 'numba'
+Traceback (most recent call last):
+  File "/zhome/55/9/232051/02616-student/poisson_problem_lsm/main_mpi_cart.py", line 5, in <module>
+    from poisson.jacobi_numba import warmup
+  File "/zhome/55/9/232051/02616-student/poisson_problem_lsm/poisson/jacobi_numba.py", line 1, in <module>
+    from numba import njit, prange
+ModuleNotFoundError: No module named 'numba'
+Traceback (most recent call last):
+  File "/zhome/55/9/232051/02616-student/poisson_problem_lsm/main_mpi_cart.py", line 5, in <module>
+Traceback (most recent call last):
+  File "/zhome/55/9/232051/02616-student/poisson_problem_lsm/main_mpi_cart.py", line 5, in <module>
+    from poisson.jacobi_numba import warmup
+  File "/zhome/55/9/232051/02616-student/poisson_problem_lsm/poisson/jacobi_numba.py", line 1, in <module>
+    from poisson.jacobi_numba import warmup
+  File "/zhome/55/9/232051/02616-student/poisson_problem_lsm/poisson/jacobi_numba.py", line 1, in <module>
+    from numba import njit, prange
+ModuleNotFoundError: No module named 'numba'
+    from numba import njit, prange
+ModuleNotFoundError: No module named 'numba'
+--------------------------------------------------------------------------
+prterun detected that one or more processes exited with non-zero status,
+thus causing the job to be terminated. The first process to do so was:
+
+   Process name: [prterun-n-62-21-76-500827@1,1]
+   Exit code:    1
+--------------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/zhome/55/9/232051/02616-student/poisson_problem_lsm/main_mpi_cart.py", line 5, in <module>
+    from poisson.jacobi_numba import warmup
+  File "/zhome/55/9/232051/02616-student/poisson_problem_lsm/poisson/jacobi_numba.py", line 1, in <module>
+    from numba import njit, prange
+ModuleNotFoundError: No module named 'numba'
+Traceback (most recent call last):
+  File "/zhome/55/9/232051/02616-student/poisson_problem_lsm/main_mpi_cart.py", line 5, in <module>
+    from poisson.jacobi_numba import warmup
+  File "/zhome/55/9/232051/02616-student/poisson_problem_lsm/poisson/jacobi_numba.py", line 1, in <module>
+    from numba import njit, prange
+ModuleNotFoundError: No module named 'numba'
+Traceback (most recent call last):
+  File "/zhome/55/9/232051/02616-student/poisson_problem_lsm/main_mpi_cart.py", line 5, in <module>
+    from poisson.jacobi_numba import warmup
+  File "/zhome/55/9/232051/02616-student/poisson_problem_lsm/poisson/jacobi_numba.py", line 1, in <module>
+    from numba import njit, prange
+ModuleNotFoundError: No module named 'numba'
+--------------------------------------------------------------------------
+prterun detected that one or more processes exited with non-zero status,
+thus causing the job to be terminated. The first process to do so was:
+
+   Process name: [prterun-n-62-21-76-500840@1,0]
+   Exit code:    1
+--------------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/zhome/55/9/232051/02616-student/poisson_problem_lsm/main_mpi_cart.py", line 5, in <module>
+Traceback (most recent call last):
+  File "/zhome/55/9/232051/02616-student/poisson_problem_lsm/main_mpi_cart.py", line 5, in <module>
+    from poisson.jacobi_numba import warmup
+  File "/zhome/55/9/232051/02616-student/poisson_problem_lsm/poisson/jacobi_numba.py", line 1, in <module>
+    from poisson.jacobi_numba import warmup
+  File "/zhome/55/9/232051/02616-student/poisson_problem_lsm/poisson/jacobi_numba.py", line 1, in <module>
+    from numba import njit, prange
+ModuleNotFoundError: No module named 'numba'
+Traceback (most recent call last):
+  File "/zhome/55/9/232051/02616-student/poisson_problem_lsm/main_mpi_cart.py", line 5, in <module>
+    from numba import njit, prange
+ModuleNotFoundError: No module named 'numba'
+    from poisson.jacobi_numba import warmup
+  File "/zhome/55/9/232051/02616-student/poisson_problem_lsm/poisson/jacobi_numba.py", line 1, in <module>
+    from numba import njit, prange
+ModuleNotFoundError: No module named 'numba'
+Traceback (most recent call last):
+  File "/zhome/55/9/232051/02616-student/poisson_problem_lsm/main_mpi_cart.py", line 5, in <module>
+Traceback (most recent call last):
+  File "/zhome/55/9/232051/02616-student/poisson_problem_lsm/main_mpi_cart.py", line 5, in <module>
+    from poisson.jacobi_numba import warmup
+  File "/zhome/55/9/232051/02616-student/poisson_problem_lsm/poisson/jacobi_numba.py", line 1, in <module>
+    from poisson.jacobi_numba import warmup
+  File "/zhome/55/9/232051/02616-student/poisson_problem_lsm/poisson/jacobi_numba.py", line 1, in <module>
+    from numba import njit, prange
+ModuleNotFoundError: No module named 'numba'
+    from numba import njit, prange
+ModuleNotFoundError: No module named 'numba'
+--------------------------------------------------------------------------
+prterun detected that one or more processes exited with non-zero status,
+thus causing the job to be terminated. The first process to do so was:
+
+   Process name: [prterun-n-62-21-76-500867@1,0]
+   Exit code:    1
+--------------------------------------------------------------------------

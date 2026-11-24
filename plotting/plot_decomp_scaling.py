@@ -15,7 +15,8 @@ import os
 from collections import defaultdict
 
 RESULTS, OUT = "results", "plots"
-COLOR = {"slab": "#0072B2", "pencil": "#E69F00", "cube": "#009E73"}
+# matplotlib C0 (blue), C1 (orange), C2 (green), as in docs/plotting_rules.md
+COLOR = {"slab": "#1f77b4", "pencil": "#ff7f0e", "cube": "#2ca02c"}
 FONT = "font-family='Helvetica, Arial, sans-serif'"
 
 
@@ -83,9 +84,13 @@ def panel(x0, y0, w, h, xs, ymax, xlabel, ylabel, curves, title="", ideal=None):
 
 
 def svg(W, H, title, body):
+    """Title line 1 = what is measured, line 2 = setup (docs/plotting_rules.md); the body moves down for line 2."""
+    what, setup = title.split("\n")
+    H += 24
     return [f"<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 {W} {H}' width='{W}' height='{H}'>",
-            f"<rect width='{W}' height='{H}' fill='white'/>", text(W / 2, 30, title, 18, weight="bold"),
-            *body, "</svg>"]
+            f"<rect width='{W}' height='{H}' fill='white'/>", text(W / 2, 30, what, 18, weight="bold"),
+            text(W / 2, 52, setup, 14, fill="#444"),
+            "<g transform='translate(0,24)'>", *body, "</g>", "</svg>"]
 
 
 def write(name, parts):
@@ -110,7 +115,7 @@ def fig_scaling(d):
                  "Speedup", ideal=((1, 1), (pmax, pmax)))
     body += panel(640, 80, 450, 330, Ps, max(m for c in curves_t for *_, pts in [c] for _, _, _, m in pts) * 1.1,
                   "number of ranks P", "Mlup/s", curves_t, "Performance")
-    write("decomp_scaling.svg", svg(1160, 470, "Strong scaling on one node, N = 200, 100 iterations: slab vs pencil vs cube", body))
+    write("decomp_scaling.svg", svg(1160, 470, "Strong scaling, NumPy MPI: slab vs pencil vs cube\nN = 200 · 1 node · 1–24 ranks", body))
 
 
 def fig_placement(core, sock):
@@ -125,7 +130,7 @@ def fig_placement(core, sock):
     top = max(m for *_, pts in curves for _, _, _, m in pts) * 1.1
     body = panel(90, 80, 560, 340, Ps, top, "number of ranks P", "Mlup/s", curves,
                  "Rank placement: solid = core, dashed = socket")
-    write("decomp_placement.svg", svg(740, 480, "Does rank placement matter? One node, N = 200", body))
+    write("decomp_placement.svg", svg(740, 480, "Rank placement, NumPy MPI: map-by core vs map-by socket\nN = 200 · 1 node · 1–24 ranks · slab / pencil / cube", body))
 
 
 def fig_multinode(one, multi):
@@ -160,7 +165,7 @@ def fig_multinode(one, multi):
     for j, kind in enumerate(COLOR):
         s.append(f"<rect x='{x0 + 14 + j * 90}' y='{y0 + 10}' width='14' height='14' fill='{COLOR[kind]}'/>")
         s.append(text(x0 + 34 + j * 90, y0 + 22, kind, 12, anchor="start"))
-    write("decomp_multinode.svg", svg(W, H, "One node vs two nodes (network between them), N = 200", s))
+    write("decomp_multinode.svg", svg(W, H, "One node vs two nodes, NumPy MPI\nN = 200 · 1–2 nodes · 24–48 ranks · slab / pencil / cube", s))
 
 
 def fig_socket2n(n=200):
@@ -221,7 +226,7 @@ def fig_socket2n(n=200):
         for j, kind in enumerate(COLOR):
             s.append(f"<rect x='{x0 + 14 + j * 90}' y='{y0 + 10}' width='14' height='14' fill='{COLOR[kind]}'/>")
             s.append(text(x0 + 34 + j * 90, y0 + 22, kind, 12, anchor="start"))
-    write("decomp_socket2n.svg", svg(W, H, f"Two nodes, ranks spread over the four sockets, N = {n}", s))
+    write("decomp_socket2n.svg", svg(W, H, f"Two nodes, ranks spread over the four sockets, NumPy MPI\nN = {n} · 2 nodes · 24–48 ranks · slab / pencil / cube", s))
 
 
 if __name__ == "__main__":
