@@ -2,13 +2,13 @@
 
 Usage (from the repo folder):  python3 plotting/plot_hybrid.py
 Reads   results/hybrid.csv       (jobs/hybrid.sub, Numba kernels, slab decomposition)
-        results/mpi_decomp.csv   (NumPy kernels, mpi-slab-24x1x1, reference)
+        results/mpi_nonblocking_improved.csv   (NumPy kernels, non-blocking MPI, 24 ranks, reference)
 Writes  plots/hybrid.png
 
 Left:  strong scaling speedup T(1)/T(t) of 1 rank with t Numba threads, log-log,
        with the ideal line S = t.
 Right: Mlup/s of every ranks x threads mix that uses all 24 cores, against the
-       NumPy MPI solver on 24 ranks.
+       fastest NumPy MPI solver on 24 ranks (non-blocking, mpi_nonblocking_improved.py).
 """
 import os
 
@@ -41,8 +41,8 @@ N = int(hybrid["N"][0])
 rows = mean_per_config(hybrid)
 
 # references
-decomp = read("results/mpi_decomp.csv")
-numpy_24 = decomp["mlups"][decomp["impl"] == "mpi-slab-24x1x1"].mean()
+nonblock = read("results/mpi_nonblocking_improved.csv")
+numpy_24 = nonblock["mlups"][(nonblock["N"] == N) & (nonblock["ranks"] == CORES)].mean()
 
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4.8))
 
@@ -69,7 +69,7 @@ mixes.sort(key=lambda x: -x[0])                  # 24x1 first, 1x24 last
 labels = [f"{r}×{t}" for r, t, _ in mixes]
 ax2.bar(labels, [m for _, _, m in mixes], color="C0", label="Hybrid MPI + Numba")
 ax2.axhline(numpy_24, color="C1", linestyle="--",
-            label=f"NumPy MPI, 24 ranks ({numpy_24:.0f} Mlup/s)")
+            label=f"NumPy MPI non-blocking, 24 ranks ({numpy_24:.0f} Mlup/s)")
 ax2.set_xlabel("MPI ranks × Numba threads (24 cores, one node)")
 ax2.set_ylabel("Performance [Mlup/s]")
 ax2.set_title(f"Ranks × threads on 24 cores, N = {N}")
