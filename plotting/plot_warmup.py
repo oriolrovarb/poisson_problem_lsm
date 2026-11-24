@@ -19,7 +19,7 @@ d = np.atleast_1d(np.genfromtxt("results/warmup.csv", delimiter=",", names=True,
 ranks, threads = int(d["ranks"][0]), int(d["threads"][0])
 
 fig, ax = plt.subplots(figsize=(7, 4.5))
-for N in np.unique(d["N"]):
+for c, N in enumerate(np.unique(d["N"])):
     rows = d[d["N"] == N]
     iters = np.unique(rows["iterations"])
     m = [rows["mlups"][rows["iterations"] == i] for i in iters]
@@ -27,7 +27,7 @@ for N in np.unique(d["N"]):
     lo = mean - np.array([x.min() for x in m])
     hi = np.array([x.max() for x in m]) - mean
     gb = 3 * (N + 2) ** 3 * 8 / 1e9
-    ax.errorbar(iters, mean, yerr=[lo, hi], marker="o", capsize=3,
+    ax.errorbar(iters, mean, yerr=[lo, hi], marker="o", capsize=3, color=f"C{c}",
                 label=f"N = {N} ({gb:.1f} GB, {gb / ranks * 1e3:.0f} MB per rank)")
 
 ax.set_xscale("log")
@@ -36,7 +36,8 @@ ax.set_xticklabels(iters)
 ax.set_ylim(bottom=0)
 ax.set_xlabel("Jacobi iterations per run")
 ax.set_ylabel("Performance [Mlup/s]")
-ax.set_title(f"Warm-up: hybrid Numba, {ranks} ranks × {threads} thread, one node")
+ax.set_title("Warm-up: performance vs iterations, hybrid MPI + Numba\n"
+             f"1 node · {ranks} ranks · {threads} thread/rank · slab {ranks}×1×1")
 ax.grid(True, which="both", alpha=0.4)
 ax.legend(fontsize="small")
 
